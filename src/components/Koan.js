@@ -12,10 +12,21 @@ const makeTestRunner = (koan, expectedString) => {
 
   const { method, actualValue, message } = koan
 
-  const expectedValue = eval(expectedString || '"_____"')
+  const expectedValue = eval(expectedString)
+
+  // suite.addTest(new Mocha.Test('Test', () => {
+  //   if (method === 'assert')
+  //     assert(expectedValue, message)
+  //   else
+  //     assert[method](actualValue, expectedValue, message)
+  // }))
+
+  const f = (assert) => {
+    eval('assert(false, "hmm what the")')
+  }
 
   suite.addTest(new Mocha.Test('Test', () => {
-    assert[method](actualValue, expectedValue)
+    f(assert)
   }))
 
   return runner
@@ -64,6 +75,8 @@ class Koan extends React.Component {
     const { method, actualString, message } = this.props.koan
     const { expectedString, errorMessage }  = this.state
 
+    const assertMethod = method === 'assert' ? 'assert' : 'assert'
+
     const inputWidth = this.state.expectedString.length * 13 > 90
                          ? expectedString.length * 13 + 10
                          : 90
@@ -71,15 +84,26 @@ class Koan extends React.Component {
     return (
       <div className="Koan">
         <form onSubmit={this.onSubmit.bind(this)}>
-          <pre
-            className="Koan-codePre"
-            dangerouslySetInnerHTML={
-              { __html: Prism.highlight( `assert.${method}( ${actualString}, `
-                                       , Prism.languages.javascript
-                                       )
-              }
-            }
-          />
+          {method === 'assert'
+          ?  <pre
+               className="Koan-codePre"
+               dangerouslySetInnerHTML={
+                 { __html: Prism.highlight( `assert( `
+                                          , Prism.languages.javascript
+                                          )
+                 }
+               }
+             />
+          :  <pre
+               className="Koan-codePre"
+               dangerouslySetInnerHTML={
+                 { __html: Prism.highlight( `assert.${method}( ${actualString}, `
+                                          , Prism.languages.javascript
+                                          )
+                 }
+               }
+             />
+          }
 
           <input
             className="Koan-input"
@@ -113,7 +137,7 @@ class Koan extends React.Component {
             >
             <div className="Koan-errorBox">
               <p className="Koan-encourage">
-                <code>//</code> 깨달음의 길은 멀고도 험한 법입니다.
+                <code>// </code>깨달음의 길은 멀고도 험한 법입니다.
               </p>
               <p className="Koan-testMessage">
                 {message}

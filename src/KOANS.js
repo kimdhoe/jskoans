@@ -1,9 +1,14 @@
 const KOANS =
   [ { category: 'assert'
-    , koans:    [ { method: 'equal'
-                  , actualString: '1 + 1'
-                  , actualValue: 2
-                  , message: 'hahaha'
+    , koans:    [ { method: 'strictEqual'
+                  , actualString: 'true'
+                  , actualValue: true
+                  , message: '참은 참이요, 거짓은 거짓이다.'
+                  }
+                , { method: 'strictEqual'
+                  , actualString: 'false'
+                  , actualValue: false
+                  , message: '참은 참이요, 거짓은 거짓이다.'
                   }
                 ]
     }
