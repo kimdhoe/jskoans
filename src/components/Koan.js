@@ -4,42 +4,14 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { assert }              from 'chai'
 import Prism                   from 'prismjs'
 
-const makeTestRunner = (koan, expectedString) => {
-  const mocha    = new Mocha({ reporter: 'json' })
-  const suite    = new Mocha.Suite('Suite')
-  const runner   = new Mocha.Runner(suite)
-  const reporter = new mocha._reporter(runner)
-
-  const { method, actualValue, message } = koan
-
-  const expectedValue = eval(expectedString)
-
-  // suite.addTest(new Mocha.Test('Test', () => {
-  //   if (method === 'assert')
-  //     assert(expectedValue, message)
-  //   else
-  //     assert[method](actualValue, expectedValue, message)
-  // }))
-
-  const f = (assert) => {
-    eval('assert(false, "hmm what the")')
-  }
-
-  suite.addTest(new Mocha.Test('Test', () => {
-    f(assert)
-  }))
-
-  return runner
-}
-
 class Koan extends React.Component {
   static propTypes    = { koan:   React.PropTypes.object.isRequired }
   static contextTypes = { router: React.PropTypes.object.isRequired }
 
   constructor () {
     super()
-    this.state = { expectedString: ''
-                 , errorMessage:   ''
+    this.state = { userInput:    ''
+                 , errorMessage: ''
                  }
   }
 
@@ -48,7 +20,7 @@ class Koan extends React.Component {
   }
 
   onChange (e) {
-    this.setState({ expectedString: e.target.value })
+    this.setState({ userInput: e.target.value })
   }
 
   onSubmit (e)  {
@@ -56,10 +28,27 @@ class Koan extends React.Component {
 
     this.setState({ errorMessage: '' })
 
-    makeTestRunner(this.props.koan, this.state.expectedString)
+    const mocha    = new Mocha({ reporter: 'json' })
+    const suite    = new Mocha.Suite('Suite')
+    const runner   = new Mocha.Runner(suite)
+    const reporter = new mocha._reporter(runner)
+
+    const code =  this.state.userInput
+      ? this.props.koan.code.replace(/____*/, this.state.userInput)
+      : this.props.koan.code.replace(/____*/, 'undefined')
+
+    const f = assert => {
+      eval(code)
+    }
+
+    suite.addTest(new Mocha.Test('Test', () => {
+      f(assert)
+    }))
+
+    runner
       .run()
       .on('pass', test => {
-        this.setState({ expectedString: '' })
+        this.setState({ userInput: '' })
 
         const { next } = this.props
 
@@ -72,44 +61,36 @@ class Koan extends React.Component {
   }
 
   render() {
-    const { method, actualString, message } = this.props.koan
-    const { expectedString, errorMessage }  = this.state
+    const [ preCode, postCode ] = this.props.koan.code.split(/___+/)
 
-    const assertMethod = method === 'assert' ? 'assert' : 'assert'
+    const { userInput, errorMessage }  = this.state
 
-    const inputWidth = this.state.expectedString.length * 13 > 90
-                         ? expectedString.length * 13 + 10
-                         : 90
+    const inputWidth = userInput.length > 6 ? userInput.length * 13 : 90
 
     return (
       <div className="Koan">
+        <div className="Koan-description">
+          {this.props.koan.description.map((x, i) =>
+            <p key={i}>{x}</p>
+          )}
+        </div>
+
         <form onSubmit={this.onSubmit.bind(this)}>
-          {method === 'assert'
-          ?  <pre
-               className="Koan-codePre"
-               dangerouslySetInnerHTML={
-                 { __html: Prism.highlight( `assert( `
-                                          , Prism.languages.javascript
-                                          )
-                 }
-               }
-             />
-          :  <pre
-               className="Koan-codePre"
-               dangerouslySetInnerHTML={
-                 { __html: Prism.highlight( `assert.${method}( ${actualString}, `
-                                          , Prism.languages.javascript
-                                          )
-                 }
-               }
-             />
-          }
+          <pre
+            className="Koan-codePre"
+            dangerouslySetInnerHTML={
+              { __html: Prism.highlight( preCode
+                                       , Prism.languages.javascript
+                                       )
+              }
+            }
+          />
 
           <input
             className="Koan-input"
             ref={x => this._input = x}
             type="text"
-            value={this.state.expectedString}
+            value={userInput}
             style={{width: `${inputWidth}px`}}
             onChange={this.onChange.bind(this)}
           />
@@ -117,7 +98,7 @@ class Koan extends React.Component {
           <pre
             className="Koan-codePost"
             dangerouslySetInnerHTML={
-              { __html: Prism.highlight( `, '${message}' )`
+              { __html: Prism.highlight( postCode
                                        , Prism.languages.javascript
                                        )
               }
@@ -138,9 +119,6 @@ class Koan extends React.Component {
             <div className="Koan-errorBox">
               <p className="Koan-encourage">
                 <code>// </code>깨달음의 길은 멀고도 험한 법입니다.
-              </p>
-              <p className="Koan-testMessage">
-                {message}
               </p>
               <pre className="Koan-errorMessage">
                 {errorMessage}

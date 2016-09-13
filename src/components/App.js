@@ -8,9 +8,9 @@ class App extends React.Component {
         <ReactCSSTransitionGroup
           transitionName="routeTransition"
           transitionAppear={true}
-          transitionAppearTimeout={600}
-          transitionEnterTimeout={600}
-          transitionLeaveTimeout={300}
+          transitionAppearTimeout={700}
+          transitionEnterTimeout={700}
+          transitionLeaveTimeout={700}
         >
           {React.cloneElement( this.props.children
                              , { key: location.pathname }

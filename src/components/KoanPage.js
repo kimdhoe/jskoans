@@ -2,17 +2,17 @@ import React     from 'react'
 import find      from 'lodash/find'
 import findIndex from 'lodash/findIndex'
 
-import KOANS from '../KOANS'
+import KOANS from '../koans/koans'
 import Koan  from './Koan'
 
 const getKoan = (category, id) => {
   const currentCategory      = find(KOANS, { category })
   const currentCategoryIndex = findIndex(KOANS, { category })
-  const koan          = currentCategory.koans[id]
+  const koan                 = currentCategory.meditations[id]
 
   const isOver          =    !KOANS[currentCategoryIndex + 1]
-                          && !currentCategory.koans[Number(id) + 1]
-  const isCategoryEnded = !currentCategory.koans[Number(id) + 1]
+                          && !currentCategory.meditations[Number(id) + 1]
+  const isCategoryEnded = !currentCategory.meditations[Number(id) + 1]
 
   const next =
     isOver
