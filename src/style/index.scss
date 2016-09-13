@@ -1,0 +1,130 @@
+@import '~normalize.css/normalize.css';
+@import './solarized';
+
+body {
+  background-color: #fdf6e3;
+  font-size: 20px;
+}
+
+.KoanPage {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.Koan {
+  position: absolute;
+  margin: 4em auto;
+  left: 0;
+  right: 0;
+}
+
+.Koan-codePre,
+.Koan-input,
+.Koan-codePost {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 20px;
+}
+
+.Koan-input {
+  outline: none;
+  border: none;
+  border-bottom: 1px dashed #444;
+  background-color: #fdf6e3;
+  width: 80px;
+  text-align: center;
+  transition: width 300ms ease;
+}
+
+.Koan-button {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.Koan-errorBox {
+  display: inline-block;
+  margin-top: 3em;
+  padding: 1em 2em;
+  border-radius: 7px;
+  background-color: #eee8d5;
+}
+
+.Koan-encourage {
+  font-style: italic;
+  font-size: 0.9em;
+  color: #93a1a1;
+}
+
+.Koan-errorMessage {
+  color: #dc322f;
+}
+
+.Koan-testMessage {
+  color: #2aa198;
+}
+
+.errorBox-enter {
+  opacity: 0;
+}
+
+.errorBox-enter.errorBox-enter-active {
+  opacity: 1;
+  transition: all 600ms ease;
+}
+
+.errorBox-leave {
+  opacity: 1;
+}
+ 
+.errorBox-leave.errorBox-leave-active {
+  opacity: 0;
+  transition: all 600ms ease;
+}
+
+.errorBox-appear {
+  opacity: 0;
+  transform: translateY(30px);
+}
+ 
+.errorBox-appear.errorBox-appear-active {
+  opacity: 1;
+  transition: all 600ms ease;
+  transform: translateY(0);
+}
+
+.routeTransition-enter {
+  opacity: 0;
+}
+
+.routeTransition-enter.routeTransition-enter-active {
+  opacity: 1;
+  transition: all 600ms ease;
+}
+
+.routeTransition-leave {
+  opacity: 1;
+  transform: translateY(0);
+}
+ 
+.routeTransition-leave.routeTransition-leave-active {
+  opacity: 0;
+  transition: all 300ms ease;
+}
+
+.routeTransition-appear {
+  opacity: 0;
+}
+ 
+.routeTransition-appear.routeTransition-appear-active {
+  opacity: 1;
+  transition: all 600ms ease;
+}

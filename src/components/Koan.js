@@ -1,25 +1,39 @@
-import React       from 'react'
-import { assert }  from 'chai'
-import { connect } from 'react-redux'
-import Highlight from 'react-highlight'
+import React                   from 'react'
+import { connect }             from 'react-redux'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { assert }              from 'chai'
+import Prism                   from 'prismjs'
 
-const { Suite, Runner, Test } = Mocha
+const makeTestRunner = (koan, expectedString) => {
+  const mocha    = new Mocha({ reporter: 'json' })
+  const suite    = new Mocha.Suite('Suite')
+  const runner   = new Mocha.Runner(suite)
+  const reporter = new mocha._reporter(runner)
+
+  const { method, actualValue, message } = koan
+
+  const expectedValue = eval(expectedString || '"_____"')
+
+  suite.addTest(new Mocha.Test('Test', () => {
+    assert[method](actualValue, expectedValue)
+  }))
+
+  return runner
+}
 
 class Koan extends React.Component {
-  // static propTypes = { koan: React.PropTypes.array.isRequired }
-
+  static propTypes    = { koan:   React.PropTypes.object.isRequired }
   static contextTypes = { router: React.PropTypes.object.isRequired }
 
   constructor () {
     super()
     this.state = { expectedString: ''
-                 , wasFailed:      false
+                 , errorMessage:   ''
                  }
   }
 
   componentDidMount () {
-    const el = document.getElementById('here')
-    Prism.highlightElement(el)
+    this._input.focus()
   }
 
   onChange (e) {
@@ -29,62 +43,87 @@ class Koan extends React.Component {
   onSubmit (e)  {
     e.preventDefault()
 
-    this.setState({ wasFailed: false })
+    this.setState({ errorMessage: '' })
 
-    const suite  = new Suite('Suite')
-    const runner = new Runner(suite)
-
-    const { method, actualValue } = this.props.koan
-    const { next }                = this.props
-
-    const expectedValue = eval(this.state.expectedString)
-
-    suite.addTest(new Test('Test', () => {
-      assert[method](actualValue, expectedValue)
-    }))
-
-    runner.run()
+    makeTestRunner(this.props.koan, this.state.expectedString)
+      .run()
       .on('pass', test => {
-        console.log('passed')
-
         this.setState({ expectedString: '' })
 
-        next && this.context.router.push(`/koans/${next.category}/${next.id}`)
+        const { next } = this.props
+
+        if (next)
+          this.context.router.push(`/koans/${next.category}/${next.id}`)
       })
       .on('fail', test => {
-        console.log('failed')
-
-        this.setState({ wasFailed: true })
+        this.setState({ errorMessage: test.err.message })
       })
   }
 
   render() {
     const { method, actualString, message } = this.props.koan
+    const { expectedString, errorMessage }  = this.state
+
+    const inputWidth = this.state.expectedString.length * 13 > 90
+                         ? expectedString.length * 13 + 10
+                         : 90
 
     return (
-      <div className="Koan language-javascript">
+      <div className="Koan">
         <form onSubmit={this.onSubmit.bind(this)}>
-          <code className="Koan-highlighted-pre">
-            assert.{method}( {actualString}, 
-          </code>
+          <pre
+            className="Koan-codePre"
+            dangerouslySetInnerHTML={
+              { __html: Prism.highlight( `assert.${method}( ${actualString}, `
+                                       , Prism.languages.javascript
+                                       )
+              }
+            }
+          />
 
           <input
+            className="Koan-input"
+            ref={x => this._input = x}
             type="text"
             value={this.state.expectedString}
+            style={{width: `${inputWidth}px`}}
             onChange={this.onChange.bind(this)}
           />
 
-        <code className="Koan-highlighted-post">
-          , '{message}' )
-        </code>
-
-
-          {this.state.wasFailed &&
-            <p>꺠달음의 길은 멀고도 험한 법이니라.</p>
-          }
+          <pre
+            className="Koan-codePost"
+            dangerouslySetInnerHTML={
+              { __html: Prism.highlight( `, '${message}' )`
+                                       , Prism.languages.javascript
+                                       )
+              }
+            }
+          />
 
           <input className="Koan-button" type="submit" value="go" />
         </form>
+
+        {errorMessage &&
+          <ReactCSSTransitionGroup
+              transitionName="errorBox"
+              transitionAppear={true}
+              transitionAppearTimeout={600}
+              transitionEnterTimeout={600}
+              transitionLeaveTimeout={600}
+            >
+            <div className="Koan-errorBox">
+              <p className="Koan-encourage">
+                <code>//</code> 깨달음의 길은 멀고도 험한 법입니다.
+              </p>
+              <p className="Koan-testMessage">
+                {message}
+              </p>
+              <pre className="Koan-errorMessage">
+                {errorMessage}
+              </pre>
+            </div>
+          </ReactCSSTransitionGroup>
+        }
       </div>
     )
   }
