@@ -6,22 +6,53 @@ body {
   font-size: 20px;
 }
 
+.Greetings {
+  position: absolute;
+  padding: 1em;
+  width: 100%;
+  text-align: center;
+}
+
+.Greetings-welcome {
+  max-width: 650px;
+  margin: 3em auto;
+  text-align: left;
+}
+
+.Greetings-startButton {
+  padding: 1em 2em;
+  border-radius: 5px;
+  background-color: #268bd2;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: #fefefe;
+}
+
 .KoanPage {
   position: relative;
-  width: 100%;
+  line-height: 1.5;
   text-align: center;
 }
 
 .Koan {
   position: absolute;
   margin: 4em auto;
+  padding: 1em;
   left: 0;
   right: 0;
 }
 
 .Koan-description {
   margin-bottom: 2em;
+  text-align: center;
   color: #93a1a1;
+}
+
+.Koan-body {
+  display: inline-block;
+  margin: 0 auto;
+  text-align: left;
+  // max-width: 600px;
 }
 
 .Koan-codePre,
@@ -57,17 +88,25 @@ body {
 }
 
 .Koan-errorBox {
+  display: block;
+}
+
+.Koan-errorBox {
   display: inline-block;
   margin-top: 3em;
   padding: 1em 2em;
   border-radius: 7px;
   background-color: #eee8d5;
+
+  pre {
+    white-space: pre-wrap;
+  }
 }
 
 .Koan-encourage {
   font-style: italic;
   font-size: 0.8em;
-  color: #cb4b16;
+  color: #268bd2;
 }
 
 .Koan-errorMessage {

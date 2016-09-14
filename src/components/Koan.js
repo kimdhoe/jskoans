@@ -3,6 +3,7 @@ import { connect }             from 'react-redux'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { assert }              from 'chai'
 import Prism                   from 'prismjs'
+import findIndex               from 'lodash/findIndex'
 
 class Koan extends React.Component {
   static propTypes    = { koan:   React.PropTypes.object.isRequired }
@@ -37,6 +38,8 @@ class Koan extends React.Component {
       ? this.props.koan.code.replace(/____*/, this.state.userInput)
       : this.props.koan.code.replace(/____*/, 'undefined')
 
+    console.log(code)
+
     const f = assert => {
       eval(code)
     }
@@ -53,7 +56,7 @@ class Koan extends React.Component {
         const { next } = this.props
 
         if (next)
-          this.context.router.push(`/koans/${next.category}/${next.id}`)
+          this.context.router.push(`/${next.category}/${next.id}`)
       })
       .on('fail', test => {
         this.setState({ errorMessage: test.err.message })
@@ -61,7 +64,15 @@ class Koan extends React.Component {
   }
 
   render() {
-    const [ preCode, postCode ] = this.props.koan.code.split(/___+/)
+    const lines = this.props.koan.code.split(/\n+/)
+    const inputLineIndex = findIndex( lines
+                                    , x => x.match(/___+/)
+                                    )
+    const preLines  = lines.slice(0, inputLineIndex)
+    const inputLine = lines[inputLineIndex]
+    const postLines = lines.slice(inputLineIndex + 1)
+
+    const [ preInput, postInput ] = inputLine.split(/___+/)
 
     const { userInput, errorMessage }  = this.state
 
@@ -75,11 +86,20 @@ class Koan extends React.Component {
           )}
         </div>
 
-        <form onSubmit={this.onSubmit.bind(this)}>
+        <form className="Koan-body" onSubmit={this.onSubmit.bind(this)}>
+          <pre
+            dangerouslySetInnerHTML={
+              { __html: Prism.highlight( preLines.join('\n')
+                                       , Prism.languages.javascript
+                                       )
+              }
+            }
+          />
+
           <pre
             className="Koan-codePre"
             dangerouslySetInnerHTML={
-              { __html: Prism.highlight( preCode
+              { __html: Prism.highlight( preInput
                                        , Prism.languages.javascript
                                        )
               }
@@ -98,13 +118,21 @@ class Koan extends React.Component {
           <pre
             className="Koan-codePost"
             dangerouslySetInnerHTML={
-              { __html: Prism.highlight( postCode
+              { __html: Prism.highlight( postInput
                                        , Prism.languages.javascript
                                        )
               }
             }
           />
 
+          <pre
+            dangerouslySetInnerHTML={
+              { __html: Prism.highlight( postLines.join('\n')
+                                       , Prism.languages.javascript
+                                       )
+              }
+            }
+          />
           <input className="Koan-button" type="submit" value="go" />
         </form>
 
@@ -116,13 +144,15 @@ class Koan extends React.Component {
               transitionEnterTimeout={600}
               transitionLeaveTimeout={600}
             >
-            <div className="Koan-errorBox">
-              <p className="Koan-encourage">
-                <code>// </code>깨달음의 길은 멀고도 험한 법입니다.
-              </p>
-              <pre className="Koan-errorMessage">
-                {errorMessage}
-              </pre>
+            <div className="Koan-errorBoxWrap">
+              <div className="Koan-errorBox">
+                <p className="Koan-encourage">
+                  <code>// </code>깨달음의 길은 멀고도 험한 법입니다.
+                </p>
+                <pre className="Koan-errorMessage">
+                  {errorMessage}
+                </pre>
+              </div>
             </div>
           </ReactCSSTransitionGroup>
         }

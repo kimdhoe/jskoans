@@ -4,6 +4,7 @@ const dropWhile = require('lodash/dropWhile')
 
 const KOANS_DIR = './src/koans/'
 const filenames = [ 'assert'
+                  , 'array'
                   ]
 const koans     = []
 
@@ -17,17 +18,15 @@ filenames.forEach(filename => {
         const lines = meditation.trim().split(/\n+/)
         const description =
           takeWhile(lines, (line => /^ *\/\//.test(line)))
-        .map(line => line.replace(/^\/\/ */, ''))
-        // .join('\n')
+            .map(line => line.replace(/^\/\/ */, ''))
+
         const code = dropWhile( lines
                               , (line => /^ *\/\//.test(line))
                               )
                         .join('\n')
 
         return { description, code }
-  })
-    // , meditations: contents.split(/\/\/ *SEP/)
-    //                        .map(x => ({ code: x.trim() }))
+      })
     }
   )
 })
