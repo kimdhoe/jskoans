@@ -1,0 +1,56 @@
+.errorBox-enter {
+  opacity: 0;
+}
+
+.errorBox-enter.errorBox-enter-active {
+  opacity: 1;
+  transition: all 600ms ease;
+}
+
+.errorBox-leave {
+  opacity: 1;
+}
+ 
+.errorBox-leave.errorBox-leave-active {
+  opacity: 0;
+  transition: all 600ms ease;
+}
+
+.errorBox-appear {
+  opacity: 0;
+  transform: translateY(30px);
+}
+ 
+.errorBox-appear.errorBox-appear-active {
+  opacity: 1;
+  transition: all 600ms ease;
+  transform: translateY(0);
+}
+
+.routeTransition-enter {
+  opacity: 0;
+}
+
+.routeTransition-enter.routeTransition-enter-active {
+  opacity: 1;
+  transition: all 700ms ease;
+}
+
+.routeTransition-leave {
+  opacity: 1;
+  transform: translateY(0);
+}
+ 
+.routeTransition-leave.routeTransition-leave-active {
+  opacity: 0;
+  transition: all 700ms ease;
+}
+
+.routeTransition-appear {
+  opacity: 0;
+}
+ 
+.routeTransition-appear.routeTransition-appear-active {
+  opacity: 1;
+  transition: all 700ms ease;
+}

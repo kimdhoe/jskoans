@@ -3,7 +3,12 @@ import { connect }             from 'react-redux'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { assert }              from 'chai'
 import Prism                   from 'prismjs'
-import findIndex               from 'lodash/findIndex'
+// import findIndex               from 'lodash/findIndex'
+import findIndex from 'ramda/src/findIndex'
+import makeIframe from '../util/makeIframe'
+import runTest    from '../util/runTest'
+import Desc from './Desc'
+import Code from './Code'
 
 class Koan extends React.Component {
   static propTypes    = { koan:   React.PropTypes.object.isRequired }
@@ -29,48 +34,43 @@ class Koan extends React.Component {
 
     this.setState({ errorMessage: '' })
 
-    const mocha    = new Mocha({ reporter: 'json' })
-    const suite    = new Mocha.Suite('Suite')
-    const runner   = new Mocha.Runner(suite)
-    const reporter = new mocha._reporter(runner)
+    const iframe        = makeIframe(document, { assert })
+    const ieval         = iframe.contentWindow.eval
+    const { koan }      = this.props
+    const { userInput } = this.state
+    const codeString    = userInput ? koan.code.replace(/___+/, userInput)
+                                    : koan.code.replace(/___+/, '빈_칸')
 
-    const code =  this.state.userInput
-      ? this.props.koan.code.replace(/____*/, this.state.userInput)
-      : this.props.koan.code.replace(/____*/, 'undefined')
+    runTest(ieval, codeString)
+      .on('pass', this.handlePass.bind(this))
+      .on('fail', this.handleFail.bind(this))
 
-    console.log(code)
+    document.body.removeChild(iframe)
+  }
 
-    const f = assert => {
-      eval(code)
-    }
+  handlePass () {
+    this.setState({ userInput: '' })
 
-    suite.addTest(new Mocha.Test('Test', () => {
-      f(assert)
-    }))
+    const { next } = this.props
 
-    runner
-      .run()
-      .on('pass', test => {
-        this.setState({ userInput: '' })
+    if (next)
+      this.context.router.push(`/${next.category}/${next.id}`)
+    else
+      console.log('No more koans. What should I do?')
+  }
 
-        const { next } = this.props
-
-        if (next)
-          this.context.router.push(`/${next.category}/${next.id}`)
-      })
-      .on('fail', test => {
-        this.setState({ errorMessage: test.err.message })
-      })
+  handleFail (result) {
+    this.setState({ errorMessage: result.err.message })
   }
 
   render() {
     const lines = this.props.koan.code.split(/\n+/)
-    const inputLineIndex = findIndex( lines
-                                    , x => x.match(/___+/)
+    const inputLineIndex = findIndex( x => x.match(/___+/)
+                                    , lines
                                     )
-    const preLines  = lines.slice(0, inputLineIndex)
-    const inputLine = lines[inputLineIndex]
-    const postLines = lines.slice(inputLineIndex + 1)
+    const preInputLine   = lines.slice(0, inputLineIndex)
+    const inputLine      = lines[inputLineIndex]
+    const postInputLine  = lines.slice(inputLineIndex + 1)
 
     const [ preInput, postInput ] = inputLine.split(/___+/)
 
@@ -80,59 +80,47 @@ class Koan extends React.Component {
 
     return (
       <div className="Koan">
-        <div className="Koan-description">
-          {this.props.koan.description.map((x, i) =>
-            <p key={i}>{x}</p>
-          )}
-        </div>
+        <Desc description={this.props.koan.description} />
 
         <form className="Koan-body" onSubmit={this.onSubmit.bind(this)}>
-          <pre
-            dangerouslySetInnerHTML={
-              { __html: Prism.highlight( preLines.join('\n')
-                                       , Prism.languages.javascript
-                                       )
-              }
-            }
+          <Code htmlString={Prism.highlight( preInputLine.join('\n')
+                                           , Prism.languages.javascript
+                                           )
+                           }
           />
 
-          <pre
-            className="Koan-codePre"
-            dangerouslySetInnerHTML={
-              { __html: Prism.highlight( preInput
+          <Code
+            htmlString={Prism.highlight( preInput
                                        , Prism.languages.javascript
                                        )
-              }
-            }
+                       }
+            isInline={true}
           />
 
           <input
             className="Koan-input"
-            ref={x => this._input = x}
             type="text"
+            ref={x => { this._input = x }}
             value={userInput}
             style={{width: `${inputWidth}px`}}
             onChange={this.onChange.bind(this)}
           />
 
-          <pre
-            className="Koan-codePost"
-            dangerouslySetInnerHTML={
-              { __html: Prism.highlight( postInput
+          <Code
+            htmlString={Prism.highlight( postInput
                                        , Prism.languages.javascript
                                        )
-              }
-            }
+                       }
+            isInline={true}
           />
 
-          <pre
-            dangerouslySetInnerHTML={
-              { __html: Prism.highlight( postLines.join('\n')
+          <Code
+            htmlString={Prism.highlight( postInputLine.join('\n')
                                        , Prism.languages.javascript
                                        )
-              }
-            }
+                       }
           />
+
           <input className="Koan-button" type="submit" value="go" />
         </form>
 
