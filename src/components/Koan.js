@@ -18,6 +18,7 @@ class Koan extends React.Component {
   static propTypes    = { meditation: React.PropTypes.object.isRequired
                         , next:       React.PropTypes.object.isRequired
                         , category:   React.PropTypes.string.isRequired
+                        , index:      React.PropTypes.string.isRequired
                         }
   static contextTypes = { router: React.PropTypes.object.isRequired }
 
@@ -99,7 +100,7 @@ class Koan extends React.Component {
     return (
       <div className="Koan">
         <h2 className="Koan-category">
-          /* {this.props.category} */
+          {this.props.category} {this.props.index}
         </h2>
 
         <Desc description={this.props.meditation.description} />

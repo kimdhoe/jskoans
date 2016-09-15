@@ -1,10 +1,16 @@
 .Header-title {
   margin: 0;
-  font-size: 15px;
+  font-size: 13px;
+  font-family: 'Source Code Pro', monospace;
 
   a {
     display: inline-block;
     padding: 5px;
+    color: #93a1a1;
+
+    &:hover {
+      color: #586e75;
+    }
   }
 }
 
@@ -108,19 +114,23 @@
 
 .Koan-category {
   display: inline-block;
-  margin: 0 0 3em;
+  margin: 0 0 1em;
   text-align: left;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-family: monospace;
-  font-size: 14px;
-  color: #93a1a1;
+  font-size: 13px;
+  color: #b58900;
 }
 
 .Koan-description {
-  margin-bottom: 2em;
+  margin: 1em 0 1.5em;
   text-align: center;
+  font-size: 0.9em;
   color: #93a1a1;
+
+  p {
+    margin: 0;
+  }
 }
 
 .Koan-body {

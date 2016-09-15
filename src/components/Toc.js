@@ -7,7 +7,7 @@ class Toc extends React.Component {
   render() {
     return (
       <div className="Toc">
-        <h2 className="Toc-title">차례</h2>
+        {/* <h2 className="Toc-title">차례</h2> */}
 
         {koans.map((category, i) =>
           <Category key={i} category={category} />

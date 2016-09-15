@@ -37,7 +37,12 @@ class KoanPage extends React.Component {
 
     return (
       <div className="KoanPage">
-        <Koan meditation={meditation} next={next} category={category} />
+        <Koan
+          meditation={meditation}
+          next={next}
+          category={category}
+          index={id}
+        />
       </div>
     )
   }
