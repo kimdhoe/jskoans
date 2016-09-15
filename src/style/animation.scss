@@ -1,3 +1,8 @@
+.is-shaking {
+  color: #dc322f;
+  animation: shake 200ms ease-in-out;
+}
+
 .errorBox-enter {
   opacity: 0;
 }
@@ -53,4 +58,11 @@
 .routeTransition-appear.routeTransition-appear-active {
   opacity: 1;
   transition: all 700ms ease-in;
+}
+
+@keyframes shake {
+    0% { transform: translateX( 0)   }
+   25% { transform: translateX( 5px) }
+   75% { transform: translateX(-5px) }
+  100% { transform: translateX( 0)   }
 }

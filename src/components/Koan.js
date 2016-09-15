@@ -24,6 +24,7 @@ class Koan extends React.Component {
     super()
     this.state = { answer:       ''
                  , errorMessage: ''
+                 , justFailed:   false
                  }
   }
 
@@ -39,7 +40,13 @@ class Koan extends React.Component {
   }
 
   handleFail (result) {
-    this.setState({ errorMessage: result.err.message })
+    this.setState({ errorMessage: result.err.message
+                  , justFailed:   true
+                  }
+                 )
+    setTimeout( function () { this.setState({ justFailed: false }) }.bind(this)
+              , 200
+              )
   }
 
   handleInput (str) {
@@ -51,8 +58,8 @@ class Koan extends React.Component {
 
     this.setState({ errorMessage: '' })
 
-    const iframe        = makeIframe(document, { assert })
-    const ieval         = iframe.contentWindow.eval
+    const iframe = makeIframe(document, { assert })
+    const ieval  = iframe.contentWindow.eval
 
     const codeString = replace( /___+/
                               , this.state.answer || '빈_칸'
@@ -79,6 +86,7 @@ class Koan extends React.Component {
             key={i}
             code={line.text}
             answer={this.state.answer}
+            justFailed={this.state.justFailed}
             handleInput={this.handleInput.bind(this)}
           />
         : <Code

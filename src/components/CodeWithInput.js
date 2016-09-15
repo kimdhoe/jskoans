@@ -27,7 +27,7 @@ class CodeWithInput extends React.Component {
         <Code htmlString={preInput} isInline={true} />
 
         <input
-          className="Koan-input"
+          className={`Koan-input ${this.props.justFailed ? "is-shaking" : ""}`}
           type="text"
           style={{width: `${inputWidth}px`}}
           ref={x => { this._input = x }}
