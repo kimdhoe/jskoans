@@ -27,6 +27,7 @@ class Koan extends React.Component {
     this.state = { answer:       ''
                  , errorMessage: ''
                  , justFailed:   false
+                 , hasFinished:  false
                  }
   }
 
@@ -36,7 +37,7 @@ class Koan extends React.Component {
     const { next } = this.props
 
     if (isEmpty(next))
-      console.log('No more koans. What should I do?')
+      this.setState({ hasFinished: true })
     else
       this.context.router.push(`/${next.category}/${next.id}`)
   }
@@ -58,7 +59,7 @@ class Koan extends React.Component {
   onSubmit (e)  {
     e.preventDefault()
 
-    this.setState({ errorMessage: '' })
+    this.setState({ errorMessage: '', hasFinished: false })
 
     const iframe = makeIframe(document, { assert })
     const ieval  = iframe.contentWindow.eval
@@ -133,6 +134,25 @@ class Koan extends React.Component {
                 <pre className="Koan-errorMessage">
                   {this.state.errorMessage}
                 </pre>
+              </div>
+            </div>
+          </ReactCSSTransitionGroup>
+        }
+
+        {this.state.hasFinished &&
+          <ReactCSSTransitionGroup
+              transitionName="errorBox"
+              transitionAppear={true}
+              transitionAppearTimeout={600}
+              transitionEnterTimeout={600}
+              transitionLeaveTimeout={600}
+          >
+            <div className="Koan-errorBoxWrap">
+              <div className="Koan-noticeBox">
+                <p className="Koan-notice">
+                  끝.<br />
+                  앞으로 더 많은 문답이 추가될 예정입니다.
+                </p>
               </div>
             </div>
           </ReactCSSTransitionGroup>

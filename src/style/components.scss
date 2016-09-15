@@ -187,6 +187,20 @@
   color: #2aa198;
 }
 
+.Koan-noticeBox {
+  display: inline-block;
+  margin-top: 3em;
+  padding: 1em 2em;
+  border-radius: 7px;
+  background-color: #268bd2;
+}
+
+.Koan-notice {
+  font-style: italic;
+  font-size: 0.8em;
+  color: #eee8d5;
+}
+
 .Code {
   margin: 0;
 }

@@ -17,7 +17,7 @@ const getKoan = (category, id) => {
 
   const next =
     isOver
-      ? null
+      ? {}
       : { category: isCategoryEnded ? KOANS[currentCategoryIndex + 1].category
                                     : category
         , id:       isCategoryEnded ? 0
