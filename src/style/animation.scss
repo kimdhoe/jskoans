@@ -39,7 +39,7 @@
 
 .routeTransition-enter.routeTransition-enter-active {
   opacity: 1;
-  transition: all 700ms ease-in;
+  transition: all 300ms ease-in;
 }
 
 .routeTransition-leave {
@@ -49,7 +49,7 @@
  
 .routeTransition-leave.routeTransition-leave-active {
   opacity: 0;
-  transition: all 700ms ease-out;
+  transition: all 300ms ease-out;
 }
 
 .routeTransition-appear {
@@ -58,7 +58,7 @@
  
 .routeTransition-appear.routeTransition-appear-active {
   opacity: 1;
-  transition: all 700ms ease-in;
+  transition: all 300ms ease-in;
 }
 
 @keyframes shake {

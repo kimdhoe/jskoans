@@ -1,4 +1,24 @@
+html {
+  box-sizing: border-box;
+}
+
+* {
+  &, &:before, &:after {
+    box-sizing: inherit;
+  }
+}
+
 body {
   background-color: #fdf6e3;
   font-size: 20px;
+  color: #586e75;
+}
+
+h1, h2, h3 {
+  font-weight: normal;
+}
+
+a {
+  text-decoration: none;
+  color: #586e75;
 }

@@ -1,10 +1,13 @@
 import React from 'react'
 import Prism from 'prismjs'
+
 import Code  from './Code'
 
 class CodeWithInput extends React.Component {
-  static propTypes = { code:   React.PropTypes.string.isRequired
-                     , answer: React.PropTypes.string.isRequired
+  static propTypes = { code:        React.PropTypes.string.isRequired
+                     , answer:      React.PropTypes.string.isRequired
+                     , justFailed:  React.PropTypes.bool.isRequired
+                     , handleInput: React.PropTypes.func.isRequired
                      }
 
   onChange (e) {

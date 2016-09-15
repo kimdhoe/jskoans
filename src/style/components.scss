@@ -1,3 +1,13 @@
+.Header-title {
+  margin: 0;
+  font-size: 15px;
+
+  a {
+    display: inline-block;
+    padding: 5px;
+  }
+}
+
 .Greetings {
   position: absolute;
   padding: 1em;
@@ -12,13 +22,75 @@
 }
 
 .Greetings-startButton {
-  padding: 1em 2em;
-  border-radius: 5px;
-  background-color: #268bd2;
+  $size: 100px;
+  $bg: #eee8d5;
+
+  display: block;
+  margin: 0 auto;
+  width: $size;
+  height: $size;
+  line-height: $size;
+  background-color: $bg;
+  border-radius: $size / 2;
   letter-spacing: 1px;
   text-decoration: none;
-  color: #fefefe;
+  color: #657b83;
+
+  &:hover {
+    background-color: darken($bg, 5%);
+  }
 }
+
+.Toc {
+  margin-top: 5em;
+  font-size: 0.8em;
+  color: #657b83;
+}
+
+.Toc-title {
+  margin-top: 4em;
+  font-weight: normal;
+}
+
+.Toc-meditationList {
+  margin: 0 0 1em 0;
+  padding: 0;
+}
+
+.Toc-categoryName {
+  margin: 1.5em 0 1em;
+  padding: 0;
+  font-weight: normal;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #b58900;
+}
+
+.Toc-meditationList a {
+  $size: 30px;
+  $bg: #eee8d5;
+
+  display: block;
+  margin: 0 0.3em;
+  width: $size;
+  height: $size;
+  line-height: $size;
+  border-radius: $size / 2;
+  background-color: $bg;
+  text-decoration: none;
+  font-size: 0.8em;
+  color: #93a1a1;
+
+  &:hover {
+    background-color: darken($bg, 5%);
+  }
+}
+
+.Toc-meditation {
+  display: inline-block;
+}
+
 
 .KoanPage {
   position: relative;
@@ -83,7 +155,7 @@
 .Koan-encourage {
   font-style: italic;
   font-size: 0.8em;
-  color: #268bd2;
+  color: #b58900;
 }
 
 .Koan-errorMessage {
@@ -104,4 +176,12 @@
 
 .Code--inline {
   display: inline-block;
+}
+
+.NotFound {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 3em auto;
+  text-align: center;
 }

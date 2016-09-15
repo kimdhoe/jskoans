@@ -2,8 +2,9 @@ import React     from 'react'
 import find      from 'lodash/find'
 import findIndex from 'lodash/findIndex'
 
-import KOANS from '../koans/koans'
-import Koan  from './Koan'
+import KOANS    from '../koans/koans'
+import NotFound from './NotFound'
+import Koan     from './Koan'
 
 const getKoan = (category, id) => {
   const currentCategory      = find(KOANS, { category })
@@ -30,6 +31,9 @@ class KoanPage extends React.Component {
   render() {
     const { category, id }     = this.props.params
     const { meditation, next } = getKoan(category, id)
+
+    if (!meditation)
+      return <NotFound />
 
     return (
       <div className="KoanPage">
