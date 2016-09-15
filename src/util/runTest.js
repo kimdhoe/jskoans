@@ -7,7 +7,7 @@ const runTest = (evalFunc, codeString) => {
   const reporter = new mocha._reporter(runner)
 
   suite.addTest(new Mocha.Test('Test', () => {
-    evalFunc(codeString)
+    evalFunc('(function () {' + codeString + '})()')
   }))
 
   return runner.run()
