@@ -8,7 +8,7 @@ import Koan  from './Koan'
 const getKoan = (category, id) => {
   const currentCategory      = find(KOANS, { category })
   const currentCategoryIndex = findIndex(KOANS, { category })
-  const koan                 = currentCategory.meditations[id]
+  const meditation           = currentCategory.meditations[id]
 
   const isOver          =    !KOANS[currentCategoryIndex + 1]
                           && !currentCategory.meditations[Number(id) + 1]
@@ -23,17 +23,17 @@ const getKoan = (category, id) => {
                                     : Number(id) + 1
         }
 
-  return { koan, next }
+  return { meditation, next }
 }
 
 class KoanPage extends React.Component {
   render() {
-    const { category, id } = this.props.params
-    const { koan, next }   = getKoan(category, id)
+    const { category, id }     = this.props.params
+    const { meditation, next } = getKoan(category, id)
 
     return (
       <div className="KoanPage">
-        <Koan koan={koan} next={next} />
+        <Koan meditation={meditation} next={next} />
       </div>
     )
   }

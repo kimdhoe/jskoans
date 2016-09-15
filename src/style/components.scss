@@ -64,18 +64,8 @@
   border-bottom: 1px dashed #444;
   background-color: #fdf6e3;
   width: 80px;
+  text-align: center;
   transition: width 300ms ease;
-}
-
-.Koan-button {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
 }
 
 .Koan-errorBox {

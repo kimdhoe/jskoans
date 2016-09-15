@@ -9,4 +9,6 @@ const Desc = ({ description }) =>
     )}
   </div>
 
+Desc.propTypes = { description: React.PropTypes.array.isRequired }
+
 export default Desc

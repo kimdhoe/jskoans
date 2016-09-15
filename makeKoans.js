@@ -9,8 +9,12 @@ const R         = require('ramda')
 //                   }
 //
 // type Meditation = { description: Array<string>
-//                   , code:        string
+//                   , code:        Array<CodeLine>
 //                   }
+//
+// type CodeLine =  { hasInputField: boolean
+//                  , text:          string
+//                  }
 
 const SEP_REGEX = /\/\/ *SEP/
 const KOANS_DIR = './src/koans/'
@@ -20,11 +24,22 @@ const FILENAMES = [ 'assert'
 
 // string -> string
 // Removes two leading slashes.
-const uncomment = str => R.replace(/^\/\/ */, '', str)
+const uncomment =
+  R.replace(/^\/\/ */, '')
 
 // string -> boolean
 // Does str starts with two slashes?
-const isCommentLine = str => R.test(/^ *\/\//, str)
+const isCommentLine =
+  R.test(/^ *\/\//)
+
+// string -> CodeLine
+// Produces a code-line.
+// Assume text contains no newline character.
+const mkCodeLine = text => (
+  { hasInputField: R.test(/___+/, text)
+  , text
+  }
+)
 
 // Array<string> -> Array<String>
 // Extracts description part from a given array of meditation strings.
@@ -33,8 +48,8 @@ const getDescriptionLines =
 
 // Array<string> -> string
 // Extracts code part from a given array of meditation strings.
-const getCode =
-  R.compose(R.join('\n'), R.dropWhile(isCommentLine))
+const getCodeLines =
+  R.compose(R.map(mkCodeLine), R.dropWhile(isCommentLine))
 
 // string -> Meditation
 // Given a string, produces a medidation.
@@ -42,7 +57,7 @@ const mkMeditation = str => {
   const lines = R.split(/\n+/, R.trim(str))
 
   return { description: getDescriptionLines(lines)
-         , code:        getCode(lines)
+         , code:        getCodeLines(lines)
          }
 }
 
@@ -77,3 +92,5 @@ fs.writeFileSync( path.join(KOANS_DIR, 'koans.js')
                   + 'module.exports = '
                   + JSON.stringify(db)
                 )
+
+console.log(JSON.stringify(db))
