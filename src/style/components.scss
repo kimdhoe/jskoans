@@ -1,7 +1,9 @@
+$code-font-family: 'Source Code Pro', monospace;
+
 .Header-title {
   margin: 0;
   font-size: 13px;
-  font-family: 'Source Code Pro', monospace;
+  font-family: $code-font-family;
 
   a {
     display: inline-block;
@@ -146,7 +148,7 @@
   margin: 0;
   padding: 0;
   line-height: 1.7;
-  font-family: 'Source Code Pro', monospace;
+  font-family: $code-font-family;
   font-size: 20px;
 }
 
@@ -170,6 +172,7 @@
 
   pre {
     white-space: pre-wrap;
+  font-family: $code-font-family;
   }
 }
 
