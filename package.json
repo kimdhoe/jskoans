@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "build:koans": "node makeKoans.js",
+    "build": "webpack",
+    "deploy": "gh-pages -d build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -23,6 +25,7 @@
     "classnames": "^2.2.5",
     "clean-webpack-plugin": "^0.1.10",
     "css-loader": "^0.25.0",
+    "gh-pages": "^0.11.0",
     "lodash": "^4.15.0",
     "node-sass": "^3.9.3",
     "normalize.css": "^4.2.0",
