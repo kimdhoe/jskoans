@@ -37,7 +37,7 @@ class KoanPage extends React.Component {
 
     return (
       <div className="KoanPage">
-        <Koan meditation={meditation} next={next} />
+        <Koan meditation={meditation} next={next} category={category} />
       </div>
     )
   }

@@ -100,10 +100,21 @@
 
 .Koan {
   position: absolute;
-  margin: 3em auto;
+  margin: 0 auto;
   padding: 1em;
   left: 0;
   right: 0;
+}
+
+.Koan-category {
+  display: inline-block;
+  margin: 0 0 3em;
+  text-align: left;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: monospace;
+  font-size: 14px;
+  color: #93a1a1;
 }
 
 .Koan-description {

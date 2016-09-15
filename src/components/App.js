@@ -4,7 +4,6 @@ import { Link }                from 'react-router'
 
 class App extends React.Component {
   render () {
-    console.log('aaa', location)
     return (
       <div className="App">
         <header className="Header">
