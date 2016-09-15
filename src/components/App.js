@@ -8,7 +8,7 @@ class App extends React.Component {
       <div className="App">
         <header className="Header">
           <h1 className="Header-title">
-            <Link to='/'> /* JavaScript 문답 */ </Link>
+            <Link to='/'> /* JS 문답 (alpha) */ </Link>
           </h1>
         </header>
 
