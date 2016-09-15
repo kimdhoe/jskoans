@@ -19,6 +19,8 @@ const makeIframe = (doc, context) => {
     win[k] = context[k]
   })
 
+  win.assert = context.assert
+
   return iframe
 }
 

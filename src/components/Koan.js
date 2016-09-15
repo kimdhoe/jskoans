@@ -13,6 +13,8 @@ import Desc          from './Desc'
 import Code          from './Code'
 import CodeWithInput from './CodeWithInput'
 
+import transpile from '../util/transpile'
+
 
 class Koan extends React.Component {
   static propTypes    = { meditation: React.PropTypes.object.isRequired
