@@ -78,7 +78,9 @@ class Koan extends React.Component {
                                     )
                               )
 
-    runTest(ieval, codeString)
+    runTest( ieval
+           , codeString + '\n'  // Remedy unexpected end of input error.
+           )
       .on('pass', this.handlePass.bind(this))
       .on('fail', this.handleFail.bind(this))
 

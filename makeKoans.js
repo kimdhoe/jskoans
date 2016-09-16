@@ -92,3 +92,5 @@ fs.writeFileSync( path.join(KOANS_DIR, 'koans.js')
                   + 'module.exports = '
                   + JSON.stringify(db)
                 )
+
+console.log(JSON.stringify(db))
