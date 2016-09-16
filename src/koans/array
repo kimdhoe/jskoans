@@ -10,13 +10,17 @@ assert.strictEqual(array[2], _____)
 // SEP
 
 // 원소의 개수를 비용 없이 알 수 있습니다.
-assert.equal([1, 2, 3, 4, 5].length, _____)
+const array = [1, 2, 3, 4, 5]
+
+assert.equal(array.length, _____)
 
 // SEP
 
 // array의 일부를 복제할 수 있습니다.
+const array = [1, 2, 3, 4, 5]
+
 assert.deepEqual(
-  [10, 11, 12, 13, 14].slice(1, 4),
+  array.slice(1, 4),
   _____
 )
 
@@ -24,14 +28,16 @@ assert.deepEqual(
 
 // 원소를 추가한 새로운 array를 만들 수 있습니다.
 const array = [1, 2]
+
 assert.deepEqual([0, ...array], _____)
-assert.deepEqual(array, [1, 2])
 
 // SEP
 
-// 만들어진 array에 값을 더할 수 있습니다.
+// 만들어진 array에 값을 넣을 수 있습니다.
 const array = [3, 5]
+
 array.push(8)
+
 assert.deepEqual(
     array,
     _____,
@@ -40,8 +46,10 @@ assert.deepEqual(
 
 // SEP
 
-// 만들어진 array에서 값을 빼낼 수 있습니다.
+// 만들어진 array에서 값을 꺼낼 수 있습니다.
 const array = [3, 5]
+
 const x = array.pop()
+
 assert.strictEqual(x, 5, '마지막 원소를 가져옵니다')
 assert.deepEqual(array, _____)

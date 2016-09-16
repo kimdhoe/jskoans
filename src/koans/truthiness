@@ -1,0 +1,27 @@
+// 0을 제외한 모든 수는 참으로 칩니다.
+const trueOrFalse = -7 ? true : false
+
+assert.equal(trueOrFalse, _____)
+
+// SEP
+
+// 0은 거짓으로 칩니다.
+const trueOrFalse = 0 ? true : false
+
+assert.equal(trueOrFalse, _____)
+
+// SEP
+
+// 빈 문자열은 거짓으로 칩니다.
+
+// SEP
+
+// null은 거짓으로 칩니다.
+
+// SEP
+
+// undefined는 거짓으로 칩니다.
+
+// SEP
+
+// NaN은 거짓으로 칩니다.

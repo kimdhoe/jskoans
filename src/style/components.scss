@@ -225,6 +225,7 @@ $muted-text-color: $color-base1;
   padding: 1em 2em;
   border-radius: 7px;
   background-color: $color-base2;
+  white-space: pre-wrap;
   text-align: center;
   color: $color-red;
 }

@@ -20,6 +20,7 @@ const SEP_REGEX = /\/\/ *SEP/
 const KOANS_DIR = './src/koans/'
 const FILENAMES = [ 'assert'
                   , 'array'
+                  , 'equality'
                   ]
 
 // string -> string

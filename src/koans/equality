@@ -1,0 +1,23 @@
+// 두 수가 같은지 확인할 수 있습니다.
+assert.isTrue(_____ === 4)
+
+// SEP
+
+// 두 문자열이 같은지 확인할 수 있습니다.
+assert.isTrue(_____ === 'js')
+
+// SEP
+
+// 두 객체가 똑같이 닮았다 해도 같은 객체일 수는 없습니다.
+const object = { x: 0 }
+
+assert.isFalse({ x: 0 } === object)
+assert.isTrue(
+    _____ === object,
+    '객체는 그 자신과만 같을 수 있습니다.'
+)
+
+// SEP
+
+// 많은 경우, 두 객체가 똑같이 닮았다면 그걸로 충분합니다.
+assert.deepEqual(_____, { x: 0 })
