@@ -1,14 +1,18 @@
 import React     from 'react'
+import map       from 'ramda/src/map'
 import find      from 'lodash/find'
 import findIndex from 'lodash/findIndex'
 
 import KOANS    from '../koans/koans'
 import NotFound from './NotFound'
+import KoanNav  from './KoanNav'
 import Koan     from './Koan'
 
+const CATEGORIES = map(x => x.category, KOANS)
+
 const getKoan = (category, id) => {
-  const currentCategory      = find(KOANS, { category })
   const currentCategoryIndex = findIndex(KOANS, { category })
+  const currentCategory      = KOANS[currentCategoryIndex]
   const meditation           = currentCategory.meditations[id]
 
   const isOver          =    !KOANS[currentCategoryIndex + 1]
@@ -37,12 +41,9 @@ class KoanPage extends React.Component {
 
     return (
       <div className="KoanPage">
-        <Koan
-          meditation={meditation}
-          next={next}
-          category={category}
-          index={id}
-        />
+        <KoanNav currentCategory={category} categories={CATEGORIES} />
+
+        <Koan meditation={meditation} next={next} />
       </div>
     )
   }

@@ -1,17 +1,35 @@
 $code-font-family: 'Source Code Pro', monospace;
+$color-base00: #657b83;
+$color-base01: #586e75;
+$color-base02: #073642;
+$color-base03: #002b36;
+$color-base0: #839496;
+$color-base1: #93a1a1;
+$color-base2: #eee8d5;
+$color-base3: #fdf6e3;
+$color-yellow: #b58900;
+$color-red: #dc322f;
+$color-blue: #268bd2;
+$color-cyan: #2aa198;
+$base-text-color: $color-base00;
+$muted-text-color: $color-base1;
+
+.App {
+  position: relative;
+}
 
 .Header-title {
   margin: 0;
+  letter-spacing: 0.1em;
   font-size: 13px;
-  font-family: $code-font-family;
 
   a {
     display: inline-block;
     padding: 5px;
-    color: #93a1a1;
+    color: $color-base1;
 
     &:hover {
-      color: #586e75;
+      color: $color-yellow;
     }
   }
 }
@@ -31,7 +49,7 @@ $code-font-family: 'Source Code Pro', monospace;
 
 .Greetings-startButton {
   $size: 100px;
-  $bg: #eee8d5;
+  $bg: $color-base2;
 
   display: block;
   margin: 0 auto;
@@ -42,7 +60,7 @@ $code-font-family: 'Source Code Pro', monospace;
   border-radius: $size / 2;
   letter-spacing: 1px;
   text-decoration: none;
-  color: #657b83;
+  color: $color-base00;
 
   &:hover {
     background-color: darken($bg, 5%);
@@ -52,7 +70,7 @@ $code-font-family: 'Source Code Pro', monospace;
 .Toc {
   margin-top: 5em;
   font-size: 0.8em;
-  color: #657b83;
+  color: $color-base00;
 }
 
 .Toc-title {
@@ -72,12 +90,12 @@ $code-font-family: 'Source Code Pro', monospace;
   font-size: 0.8em;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #b58900;
+  color: $color-yellow;
 }
 
 .Toc-meditationList a {
   $size: 30px;
-  $bg: #eee8d5;
+  $bg: $color-base2;
 
   display: block;
   margin: 0 0.3em;
@@ -88,7 +106,7 @@ $code-font-family: 'Source Code Pro', monospace;
   background-color: $bg;
   text-decoration: none;
   font-size: 0.8em;
-  color: #93a1a1;
+  color: $color-base1;
 
   &:hover {
     background-color: darken($bg, 5%);
@@ -101,41 +119,55 @@ $code-font-family: 'Source Code Pro', monospace;
 
 
 .KoanPage {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
   line-height: 1.5;
   text-align: center;
 }
 
-.Koan {
-  position: absolute;
-  margin: 0 auto;
-  padding: 1em;
-  left: 0;
-  right: 0;
-}
-
-.Koan-category {
-  display: inline-block;
-  margin: 0 0 1em;
-  text-align: left;
+.KoanNav {
+  font-size: 0.7em;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-size: 13px;
-  color: #b58900;
+}
+
+.KoanNav-current, .KoanNav-link {
+  display: inline-block;
+  margin: 0 0.7em;
+  padding: 0 0.1em;
+}
+
+.KoanNav-current {
+  color: $color-base02;
+  border-bottom: 1px solid $color-base02;
+}
+
+.KoanNav-link {
+  color: lighten($muted-text-color, 10%);
+
+  &:hover {
+    color: $color-yellow;
+  }
+}
+
+.Koan {
+  margin: 1em auto;
 }
 
 .Koan-description {
-  margin: 1em 0 1.5em;
-  text-align: center;
+  display: inline-block;
+  margin: 1em auto 1.5em;
+  text-align: left;
   font-size: 0.9em;
-  color: #93a1a1;
+  color: $muted-text-color;
 
   p {
     margin: 0;
   }
 }
 
-.Koan-body {
+.Koan-codes {
   display: inline-block;
   margin: 0 auto;
   text-align: left;
@@ -156,52 +188,53 @@ $code-font-family: 'Source Code Pro', monospace;
   margin: 3px 0;
   outline: none;
   border: none;
-  border-bottom: 1px dashed #444;
+  border-bottom: 1px dashed $color-base02;
   background-color: transparent;
   width: 80px;
   text-align: center;
   transition: width 300ms ease;
 }
 
-.Koan-errorBox {
-  display: inline-block;
+.Koan-help {
   margin-top: 3em;
+}
+
+.HelpBox {
+  display: inline-block;
+  padding: 1em;
+  border-radius: 7px;
+  line-height: 1.7;
+  text-align: left;
+  font-size: 0.8em;
+}
+
+.HelpBox-comment {
+  margin: 0;
+  color: $color-base1;
+  font-size: 0.9em;
+}
+
+.HelpBox-encourage {
+  margin: 0;
+  padding-left: 1em;
+  font-style: italic;
+  color: $color-cyan;
+}
+
+.HelpBox-errorMessage {
   padding: 1em 2em;
   border-radius: 7px;
-  background-color: #eee8d5;
-
-  pre {
-    white-space: pre-wrap;
-  font-family: $code-font-family;
-  }
+  background-color: $color-base2;
+  text-align: center;
+  color: $color-red;
 }
 
-.Koan-encourage {
-  font-style: italic;
-  font-size: 0.8em;
-  color: #b58900;
-}
-
-.Koan-errorMessage {
-  color: #dc322f;
-}
-
-.Koan-testMessage {
-  color: #2aa198;
-}
-
-.Koan-noticeBox {
-  display: inline-block;
-  margin-top: 3em;
+.HelpBox-notice {
   padding: 1em 2em;
   border-radius: 7px;
-  background-color: #268bd2;
-}
-
-.Koan-notice {
-  font-style: italic;
-  font-size: 0.8em;
-  color: #eee8d5;
+  background-color: $color-blue;
+  text-align: center;
+  color: $color-base2;
 }
 
 .Code {

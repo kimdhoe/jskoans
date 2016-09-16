@@ -9,25 +9,27 @@ import isEmpty                 from 'ramda/src/isEmpty'
 
 import makeIframe    from '../util/makeIframe'
 import runTest       from '../util/runTest'
+import transpile     from '../util/transpile'
+import encourage     from '../util/encourage'
+import withFadeSlide from '../util/withFadeSlide'
 import Desc          from './Desc'
 import Code          from './Code'
 import CodeWithInput from './CodeWithInput'
+import HelpBox       from './HelpBox'
 
-import transpile from '../util/transpile'
-
+const AnimatedHelpBox = withFadeSlide(HelpBox)
 
 class Koan extends React.Component {
   static propTypes    = { meditation: React.PropTypes.object.isRequired
                         , next:       React.PropTypes.object.isRequired
-                        , category:   React.PropTypes.string.isRequired
-                        , index:      React.PropTypes.string.isRequired
                         }
-  static contextTypes = { router: React.PropTypes.object.isRequired }
+  static contextTypes = { router:     React.PropTypes.object.isRequired }
 
   constructor () {
     super()
     this.state = { answer:       ''
                  , errorMessage: ''
+                 , attempts:     0
                  , justFailed:   false
                  , hasFinished:  false
                  }
@@ -47,6 +49,7 @@ class Koan extends React.Component {
   handleFail (result) {
     this.setState({ errorMessage: result.err.message
                   , justFailed:   true
+                  , attempts:     this.state.attempts + 1
                   }
                  )
     setTimeout( function () { this.setState({ justFailed: false }) }.bind(this)
@@ -102,63 +105,37 @@ class Koan extends React.Component {
 
     return (
       <div className="Koan">
-        <h2 className="Koan-category">
-          {this.props.category} {this.props.index}
-        </h2>
-
         <Desc description={this.props.meditation.description} />
 
-        <form className="Koan-body" onSubmit={this.onSubmit.bind(this)}>
-          <div>
-            {codes}
-          </div>
-
-          <input
-            className="Koan-button visuallyHidden"
-            type="submit"
-            value="go"
-          />
-        </form>
-
-        {this.state.errorMessage &&
-          <ReactCSSTransitionGroup
-              transitionName="errorBox"
-              transitionAppear={true}
-              transitionAppearTimeout={600}
-              transitionEnterTimeout={600}
-              transitionLeaveTimeout={600}
-          >
-            <div className="Koan-errorBoxWrap">
-              <div className="Koan-errorBox">
-                <p className="Koan-encourage">
-                  <code>// </code>깨달음의 길은 멀고도 험한 법입니다.
-                </p>
-                <pre className="Koan-errorMessage">
-                  {this.state.errorMessage}
-                </pre>
-              </div>
+        <div className="Koan-body">
+          <form className="Koan-codes" onSubmit={this.onSubmit.bind(this)}>
+            <div>
+              {codes}
             </div>
-          </ReactCSSTransitionGroup>
-        }
 
-        {this.state.hasFinished &&
-          <ReactCSSTransitionGroup
-              transitionName="errorBox"
-              transitionAppear={true}
-              transitionAppearTimeout={600}
-              transitionEnterTimeout={600}
-              transitionLeaveTimeout={600}
-          >
-            <div className="Koan-errorBoxWrap">
-              <div className="Koan-noticeBox">
-                <p className="Koan-notice">
-                  끝.<br />
-                  앞으로 더 많은 문답이 추가될 예정입니다.
-                </p>
-              </div>
-            </div>
-          </ReactCSSTransitionGroup>
-        }
+            <input
+              className="Koan-button visuallyHidden"
+              type="submit"
+              value="go"
+            />
+          </form>
+        </div>
+
+        <div className="Koan-help">
+          {this.state.errorMessage &&
+            <AnimatedHelpBox
+              failMessage="아직 깨달음에 이르지 못했습니다."
+              encourage={encourage(this.state.attempts)}
+              errorMessage={this.state.errorMessage}
+            />
+          }
+
+          {this.state.hasFinished &&
+            <AnimatedHelpBox
+              notice="끝. 앞으로 더 많은 내용이 추가될 예정입니다."
+            />
+          }
+        </div>
       </div>
     )
   }
