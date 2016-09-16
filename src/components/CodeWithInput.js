@@ -26,7 +26,7 @@ class CodeWithInput extends React.Component {
 
     return (
       <div className="Koan-inputLine">
-        <Code htmlString={preInput} isInline={true} />
+        <Code text={preInput} isInline={true} />
 
         <input
           className={`Koan-input ${this.props.justFailed ? "is-shaking" : ""}`}
@@ -37,7 +37,7 @@ class CodeWithInput extends React.Component {
           onChange={this.onChange.bind(this)}
         />
 
-        <Code htmlString={postInput} isInline={true} />
+        <Code text={postInput} isInline={true} />
       </div>
     )
   }

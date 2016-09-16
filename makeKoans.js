@@ -54,7 +54,7 @@ const getCodeLines =
 // string -> Meditation
 // Given a string, produces a medidation.
 const mkMeditation = str => {
-  const lines = R.split(/\n+/, R.trim(str))
+  const lines = R.split('\n', R.trim(str))
 
   return { description: getDescriptionLines(lines)
          , code:        getCodeLines(lines)
@@ -92,5 +92,3 @@ fs.writeFileSync( path.join(KOANS_DIR, 'koans.js')
                   + 'module.exports = '
                   + JSON.stringify(db)
                 )
-
-console.log(JSON.stringify(db))

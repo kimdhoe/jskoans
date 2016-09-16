@@ -101,7 +101,7 @@ class Koan extends React.Component {
           />
         : <Code
             key={i}
-            htmlString={line.text}
+            text={line.text}
           />
     )
 

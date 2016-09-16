@@ -1,6 +1,6 @@
 // 참과 거짓에 대해 고민해봅시다.
 // 우리는 assert를 이용해서 값들의 진실성을 검사해볼 것입니다.
-assert(_____)  // 참이어야 합니다
+assert.isTrue(_____)  // 참이어야 합니다
 
 // SEP
 
@@ -10,7 +10,7 @@ assert.isFalse(_____, '거짓이어야 합니다')
 // SEP
 
 // 현실을 이해하려면 실재와 우리의 기대를 비교해보아야만 합니다.
-const expected = _____
 const actual = 1 + 1
+const expected = _____
 
 assert.equal(actual, expected)
