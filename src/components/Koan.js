@@ -6,6 +6,7 @@ import map                     from 'ramda/src/map'
 import join                    from 'ramda/src/join'
 import replace                 from 'ramda/src/replace'
 import isEmpty                 from 'ramda/src/isEmpty'
+import R from 'ramda'  // !!!
 
 import makeIframe    from '../util/makeIframe'
 import runTest       from '../util/runTest'
@@ -17,6 +18,8 @@ import Code          from './Code'
 import CodeWithInput from './CodeWithInput'
 import HelpBox       from './HelpBox'
 
+import fillIn from '../util/fillIn'
+
 const AnimatedHelpBox = withFadeSlide(HelpBox)
 
 class Koan extends React.Component {
@@ -27,7 +30,7 @@ class Koan extends React.Component {
 
   constructor () {
     super()
-    this.state = { answer:       ''
+    this.state = { answers:       {}
                  , errorMessage: ''
                  , attempts:     0
                  , justFailed:   false
@@ -36,7 +39,7 @@ class Koan extends React.Component {
   }
 
   handlePass () {
-    this.setState({ answer: '' })
+    this.setState({ answers: {} })
 
     const { next } = this.props
 
@@ -57,8 +60,13 @@ class Koan extends React.Component {
               )
   }
 
-  handleInput (str) {
-    this.setState({ answer: str })
+  handleInput (answer, index) {
+    this.setState({ answers: { ...this.state.answers
+                            , [index]: answer
+                            }
+                  }
+                 )
+    console.log(this.state.answers)
   }
 
   onSubmit (e)  {
@@ -69,18 +77,12 @@ class Koan extends React.Component {
     const iframe = makeIframe(document, { assert })
     const ieval  = iframe.contentWindow.eval
 
-    const codeString = replace( /___+/
-                              , this.state.answer || '빈_칸'
-                              , join( '\n'
-                                    , map( x => x.text
-                                         , this.props.meditation.code
-                                         )
-                                    )
-                              )
+    const codeString =
+      transpile(fillIn(this.props.meditation.code, this.state.answers)) + '\n'
 
-    runTest( ieval
-           , codeString + '\n'  // Remedy unexpected end of input error.
-           )
+    console.log(codeString)
+
+    runTest(ieval, codeString)
       .on('pass', this.handlePass.bind(this))
       .on('fail', this.handleFail.bind(this))
 
@@ -90,20 +92,25 @@ class Koan extends React.Component {
   render() {
     const { description, code } = this.props.meditation
 
-    const codes = code.map((line, i) =>
-      line.hasInputField
-        ? <CodeWithInput
-            key={i}
-            code={line.text}
-            answer={this.state.answer}
-            justFailed={this.state.justFailed}
-            handleInput={this.handleInput.bind(this)}
-          />
-        : <Code
-            key={i}
-            text={line.text}
-          />
-    )
+    // state - Index number of the next input field.
+    let nextInputIndex = 0
+
+    const codes = code.map((line, i) => {
+
+      return line.hasInputField
+               ? <CodeWithInput
+                   key={i}
+                   index={nextInputIndex}
+                   code={line.text}
+                   answer={this.state.answers[nextInputIndex++] || ''}
+                   justFailed={this.state.justFailed}
+                   handleInput={this.handleInput.bind(this)}
+                 />
+               : <Code
+                   key={i}
+                   text={line.text}
+                 />
+    })
 
     return (
       <div className="Koan">
