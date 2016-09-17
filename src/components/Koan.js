@@ -9,7 +9,7 @@ import isEmpty                 from 'ramda/src/isEmpty'
 
 import makeIframe    from '../util/makeIframe'
 import runTest       from '../util/runTest'
-import transpile     from '../util/transpile'
+// import transpile     from '../util/transpile'
 import encourage     from '../util/encourage'
 import withFadeSlide from '../util/withFadeSlide'
 import Desc          from './Desc'
@@ -65,7 +65,6 @@ class Koan extends React.Component {
                             }
                   }
                  )
-    console.log(this.state.answers)
   }
 
   onSubmit (e)  {
@@ -77,9 +76,8 @@ class Koan extends React.Component {
     const ieval  = iframe.contentWindow.eval
 
     const codeString =
-      transpile(fillIn(this.props.meditation.code, this.state.answers)) + '\n'
-
-    console.log(codeString)
+      fillIn(this.props.meditation.code, this.state.answers) + '\n'
+      // transpile(fillIn(this.props.meditation.code, this.state.answers)) + '\n'
 
     runTest(ieval, codeString)
       .on('pass', this.handlePass.bind(this))
