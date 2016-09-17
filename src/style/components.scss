@@ -45,6 +45,8 @@ $muted-text-color: $color-base1;
   max-width: 650px;
   margin: 3em auto;
   text-align: left;
+  line-height: 1.5;
+  font-family: $code-font-family;
 }
 
 .Greetings-startButton {

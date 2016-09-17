@@ -6,7 +6,6 @@ import map                     from 'ramda/src/map'
 import join                    from 'ramda/src/join'
 import replace                 from 'ramda/src/replace'
 import isEmpty                 from 'ramda/src/isEmpty'
-import R from 'ramda'  // !!!
 
 import makeIframe    from '../util/makeIframe'
 import runTest       from '../util/runTest'

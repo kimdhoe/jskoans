@@ -20,22 +20,21 @@ const SEP_REGEX = /\/\/ *SEP/
 const KOANS_DIR = './src/koans/'
 const FILENAMES = [ 'assert'
                   , 'array'
+                  , 'truthiness'
                   , 'equality'
                   ]
 
 // string -> string
 // Removes two leading slashes.
-const uncomment =
-  R.replace(/^\/\/ */, '')
+const uncomment = R.replace(/^\/\/ */, '')
 
 // string -> boolean
 // Does str starts with two slashes?
-const isCommentLine =
-  R.test(/^ *\/\//)
+const isCommentLine = R.test(/^ *\/\//)
 
 // string -> CodeLine
 // Produces a code-line.
-// Assume text contains no newline character.
+// Assume text contains no newline characters.
 const mkCodeLine = text => (
   { hasInputField: R.test(/___+/, text)
   , text

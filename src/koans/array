@@ -24,8 +24,8 @@ assert.equal(array.length, _____)
 const array = [1, 2, 3, 4, 5]
 
 assert.deepEqual(
-    array.slice(1, 4),
-    _____
+    array.slice(1 , _____),
+    [ 2, 3, 4 ]
 )
 
 // SEP
