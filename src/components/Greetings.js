@@ -26,12 +26,7 @@ const Greetings = () =>
      있으며, 완성되지 않은 단위 테스트 형식의 코드를 제시합니다. 여러분의 역할은 테스트가 통과할
     수 있도록 이 코드를 완성하는 것입니다.</p>
 
-    <Koan
-      meditation={meditation}
-      next={next}
-    />
-
-    {/* <Link className="Greetings-startButton" to='/assert/0'>시작</Link> */}
+    <Link className="Greetings-startButton" to='/assert/0'>시작</Link>
 
     <Toc />
   </div>

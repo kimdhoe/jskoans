@@ -1,7 +1,7 @@
 {
   "name": "js-koans",
   "version": "0.0.1",
-  "description": "",
+  "description": "Interactive JavaScript Koans",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
