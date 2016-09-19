@@ -10,7 +10,7 @@ const makeIframe = (doc, context) => {
 
   document.body.appendChild(iframe)
 
-  const win  = iframe.contentWindow
+  const win = iframe.contentWindow
 
   if (!win.eval && win.execScript)
     win.execScript.call(win, 'null')
