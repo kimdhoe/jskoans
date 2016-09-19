@@ -8,7 +8,7 @@ class App extends React.Component {
       <div className="App">
         <header className="Header">
           <h1 className="Header-title">
-            <Link to='/'> JS Koans (alpha) </Link>
+            <Link to="/"> JS Koans (alpha) </Link>
           </h1>
         </header>
 

@@ -20,7 +20,7 @@ class CodeWithInput extends React.Component {
 
     // Render the default answer in input field, if present.
     const defaultAnswer = code.match(FILL_ME_IN_REGEX)[0]
-                              .replace(/_/g, '')
+                            .replace(/_/g, '')
 
     if (defaultAnswer)
       this.props.handleInput(defaultAnswer, this.props.index)

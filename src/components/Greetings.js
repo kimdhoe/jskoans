@@ -4,19 +4,6 @@ import { Link } from 'react-router'
 import Koan     from './Koan'
 import Toc      from './Toc'
 
-const meditation =
-  { description: [ '준비됐으면 true를 입력하세요.' ]
-  , code:        [ { hasInputField: true
-                   , text:          'const isReady = _____'
-                   }
-                 , { hasInputField: false
-                   , text:          ''
-                   }
-                 , { hasInputField: false
-                   , text:          'assert.isTrue( isReady )'
-                   }
-                 ]
-}
 const next = { category: 'assert', id: 0 }
 
 const Greetings = () =>

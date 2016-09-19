@@ -29,7 +29,7 @@ class Koan extends React.Component {
 
   constructor () {
     super()
-    this.state = { answers:       {}
+    this.state = { answers:      {}
                  , errorMessage: ''
                  , attempts:     0
                  , justFailed:   false
@@ -61,8 +61,8 @@ class Koan extends React.Component {
 
   handleInput (answer, index) {
     this.setState({ answers: { ...this.state.answers
-                            , [index]: answer
-                            }
+                             , [index]: answer
+                             }
                   }
                  )
   }
@@ -92,22 +92,21 @@ class Koan extends React.Component {
     // state - Index number of the next input field.
     let nextInputIndex = 0
 
-    const codes = code.map((line, i) => {
-
-      return line.hasInputField
-               ? <CodeWithInput
-                   key={i}
-                   index={nextInputIndex}
-                   code={line.text}
-                   answer={this.state.answers[nextInputIndex++] || ''}
-                   justFailed={this.state.justFailed}
-                   handleInput={this.handleInput.bind(this)}
-                 />
-               : <Code
-                   key={i}
-                   text={line.text}
-                 />
-    })
+    const codes = code.map((line, i) =>
+      line.hasInputField
+        ? <CodeWithInput
+            key={i}
+            index={nextInputIndex}
+            code={line.text}
+            answer={this.state.answers[nextInputIndex++] || ''}
+            justFailed={this.state.justFailed}
+            handleInput={this.handleInput.bind(this)}
+          />
+        : <Code
+            key={i}
+            text={line.text}
+          />
+    )
 
     return (
       <div className="Koan">
