@@ -1,11 +1,11 @@
 // 참과 거짓에 대해 고민해봅시다.
 // 우리는 assert를 이용해서 값들의 진실성을 검사해볼 것입니다.
-assert.isTrue(___false___)  // 참인 값만 테스트를 통과합니다.
+assert.isTrue(___false___)  // true로 바꾸세요.
 
 // SEP
 
 // 적절한 테스트 문구가 여러분을 이끌어줄 수 있습니다.
-assert.isFalse(_____, '거짓이어야 합니다')
+assert.isFalse(_____, 'false여야 합니다')
 
 // SEP
 

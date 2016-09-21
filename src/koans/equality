@@ -1,10 +1,30 @@
 // 두 수가 같은지 확인할 수 있습니다.
-assert.isTrue(_____ === 4)
+assert.isTrue(4 + 1 === _____)
 
 // SEP
 
 // 두 문자열이 같은지 확인할 수 있습니다.
-assert.isTrue(_____ === 'js')
+assert.isTrue('j' + 's' === _____)
+
+// SEP
+
+// ===는 두 값이 같은지 형변환 없이 엄격하게 비교합니다.
+assert.isFalse(5 === '5')
+
+assert.isTrue(
+    5 === ___'5'___,
+    '숫자 5와 정확히 같은 값이어야 합니다'
+)
+
+// SEP
+
+// ==로 종류가 다른 두 값을 비교할 때 형변환이 일어나기도 합니다.
+assert.isTrue(false == 0)
+
+assert.isTrue(
+    5 == '_____',
+    '숫자 5와 같다고 칠 수 있는 문자열이어야 합니다'
+  )
 
 // SEP
 
@@ -15,7 +35,7 @@ assert.isFalse({ x: 0 } === object)
 
 assert.isTrue(
     ___{ x: 0 }___ === object,
-    '객체는 그 자신과만 같을 수 있습니다.'
+    '객체는 그 자신과만 같을 수 있습니다'
 )
 
 // SEP

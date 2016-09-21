@@ -13,15 +13,27 @@ assert.equal(trueOrFalse, _____)
 // SEP
 
 // 빈 문자열은 거짓으로 칩니다.
+const trueOrFalse = '' ? true : false
+
+assert.equal(trueOrFalse, _____)
 
 // SEP
 
-// null은 거짓으로 칩니다.
+// 조건으로 쓰였을 때 null은 거짓으로 칩니다.
+const trueOrFalse = null ? true : false
+
+assert.equal(trueOrFalse, _____)
 
 // SEP
 
-// undefined는 거짓으로 칩니다.
+// 조건으로 쓰였을 때 undefined는 거짓으로 칩니다.
+const trueOrFalse = undefined ? true : false
+
+assert.equal(trueOrFalse, _____)
 
 // SEP
 
-// NaN은 거짓으로 칩니다.
+// 조건으로 쓰였을 때 NaN은 거짓으로 칩니다.
+const trueOrFalse = NaN ? true : false
+
+assert.equal(trueOrFalse, _____)

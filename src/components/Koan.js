@@ -9,6 +9,7 @@ import isEmpty                 from 'ramda/src/isEmpty'
 
 import makeIframe    from '../util/makeIframe'
 import runTest       from '../util/runTest'
+import fillIn        from '../util/fillIn'
 // import transpile     from '../util/transpile'
 import encourage     from '../util/encourage'
 import withFadeSlide from '../util/withFadeSlide'
@@ -16,8 +17,6 @@ import Desc          from './Desc'
 import Code          from './Code'
 import CodeWithInput from './CodeWithInput'
 import HelpBox       from './HelpBox'
-
-import fillIn from '../util/fillIn'
 
 const AnimatedHelpBox = withFadeSlide(HelpBox)
 
