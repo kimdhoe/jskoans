@@ -19,9 +19,10 @@ const R    = require('ramda')
 const SEP_REGEX = /\/\/ *SEP/
 const KOANS_DIR = './src/koans/'
 const FILENAMES = [ 'assert'
-                  , 'array'
                   , 'truthiness'
                   , 'equality'
+                  , 'object'
+                  , 'array'
                   ]
 
 // string -> string
