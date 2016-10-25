@@ -10,7 +10,7 @@ const withFadeSlide = Comp => props =>
     transitionEnterTimeout={600}
     transitionLeaveTimeout={600}
   >
-    <Comp {...props} />
+    <Comp {...props} key={props.attempts} />
   </ReactCSSTransitionGroup>
 
 export default withFadeSlide

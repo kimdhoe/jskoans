@@ -1,7 +1,7 @@
 import React from 'react'
 
-const HelpBox = ({ failMessage, errorMessage, encourage, notice }) =>
-  <div className={`HelpBox ${errorMessage ? "HelpBox--error" : ""}`}>
+const HelpBox = ({ failMessage, encourage, notice, error }) =>
+  <div className={`HelpBox ${error.message ? "HelpBox--error" : ""}`}>
     {failMessage &&
       <div className="HelpBox-failMessage">
         <p className="HelpBox-comment">
@@ -15,9 +15,9 @@ const HelpBox = ({ failMessage, errorMessage, encourage, notice }) =>
       </div>
     }
 
-    {errorMessage &&
+    {error.message &&
       <pre className="HelpBox-errorMessage">
-        {errorMessage}
+        {error.name}: {error.message}
       </pre>
     }
 
@@ -28,10 +28,10 @@ const HelpBox = ({ failMessage, errorMessage, encourage, notice }) =>
     }
   </div>
 
-HelpBox.propTypes = { failMessage:   React.PropTypes.string
-                    ,  errorMessage: React.PropTypes.string
-                    ,  encourage:    React.PropTypes.string
-                    ,  notice:       React.PropTypes.string
+HelpBox.propTypes = { failMessage: React.PropTypes.string
+                    , encourage:   React.PropTypes.string
+                    , notice:      React.PropTypes.string
+                    , error:       React.PropTypes.object
                     }
 
 export default HelpBox

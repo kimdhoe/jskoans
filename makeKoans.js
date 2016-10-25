@@ -23,6 +23,7 @@ const FILENAMES = [ 'assert'
                   , 'equality'
                   , 'object'
                   , 'array'
+                  , 'temp'
                   ]
 
 // string -> string

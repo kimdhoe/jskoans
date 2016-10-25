@@ -1,14 +1,14 @@
 import React                   from 'react'
 import { connect }             from 'react-redux'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { assert }              from 'chai'
 import map                     from 'ramda/src/map'
 import join                    from 'ramda/src/join'
 import replace                 from 'ramda/src/replace'
 import isEmpty                 from 'ramda/src/isEmpty'
 
 import makeIframe    from '../util/makeIframe'
-import runTest       from '../util/runTest'
+import runTest       from '../util/runTest2'
+import { check }     from '../util/check'
 import fillIn        from '../util/fillIn'
 // import transpile     from '../util/transpile'
 import encourage     from '../util/encourage'
@@ -28,11 +28,11 @@ class Koan extends React.Component {
 
   constructor () {
     super()
-    this.state = { answers:      {}
-                 , errorMessage: ''
-                 , attempts:     0
-                 , justFailed:   false
-                 , hasFinished:  false
+    this.state = { answers:     {}
+                 , attempts:    0
+                 , justFailed:  false
+                 , hasFinished: false
+                 , error:       null
                  }
   }
 
@@ -48,9 +48,9 @@ class Koan extends React.Component {
   }
 
   handleFail (result) {
-    this.setState({ errorMessage: result.err.message
-                  , justFailed:   true
-                  , attempts:     this.state.attempts + 1
+    this.setState({ justFailed: true
+                  , attempts:   this.state.attempts + 1
+                  , error:      result.err
                   }
                  )
     setTimeout( function () { this.setState({ justFailed: false }) }.bind(this)
@@ -69,18 +69,36 @@ class Koan extends React.Component {
   onSubmit (e)  {
     e.preventDefault()
 
-    this.setState({ errorMessage: '', hasFinished: false })
+    this.setState({ error: null, hasFinished: false })
 
-    const iframe = makeIframe(document, { assert })
+    const keys = Object.keys(this.state.answers)
+
+    if (  keys.length === 0
+       || keys.some(k => this.state.answers[k].trim() === '')
+       )
+      return this.handleFail({ err: { name:    'BlankError'
+                                    , message: '빈 칸을 채워주세요.'
+                                    }
+                             }
+                            )
+
+    const iframe = makeIframe(document, { check })
     const ieval  = iframe.contentWindow.eval
 
     const codeString =
       fillIn(this.props.meditation.code, this.state.answers) + '\n'
       // transpile(fillIn(this.props.meditation.code, this.state.answers)) + '\n'
 
-    runTest(ieval, codeString)
-      .on('pass', this.handlePass.bind(this))
-      .on('fail', this.handleFail.bind(this))
+    // runTest(ieval, codeString)
+    //   .on('pass', this.handlePass.bind(this))
+    //   .on('fail', this.handleFail.bind(this))
+
+    const result = runTest(ieval, codeString)
+
+    if (result.failed)
+      this.handleFail(result)
+    else
+      this.handlePass()
 
     document.body.removeChild(iframe)
   }
@@ -126,11 +144,12 @@ class Koan extends React.Component {
         </div>
 
         <div className="Koan-help">
-          {this.state.errorMessage &&
+          {this.state.error &&
             <AnimatedHelpBox
               failMessage="아직 깨달음에 이르지 못했습니다."
               encourage={encourage(this.state.attempts)}
-              errorMessage={this.state.errorMessage}
+              key={this.state.attempts}
+              error={this.state.error}
             />
           }
 

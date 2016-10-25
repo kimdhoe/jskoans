@@ -1,11 +1,11 @@
 // 참과 거짓에 대해 고민해봅시다.
-// 우리는 assert를 이용해서 값들의 진실성을 검사해볼 것입니다.
-assert.isTrue(___false___)  // true로 바꾸세요.
+// 우리는 check를 이용해서 값들의 진실성을 검사해볼 것입니다.
+check.isTrue(___false___)  // true로 바꾸세요.
 
 // SEP
 
 // 적절한 테스트 문구가 여러분을 이끌어줄 수 있습니다.
-assert.isFalse(_____, 'false여야 합니다')
+check.isFalse(_____, 'false여야 합니다')
 
 // SEP
 
@@ -13,4 +13,4 @@ assert.isFalse(_____, 'false여야 합니다')
 const actual = 1 + 1
 const expected = _____
 
-assert.equal(actual, expected)
+check.equal(actual, expected)

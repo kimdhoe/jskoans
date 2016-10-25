@@ -1,17 +1,17 @@
 // 두 수가 같은지 확인할 수 있습니다.
-assert.isTrue(4 + 1 === _____)
+check.isTrue(4 + 1 === _____)
 
 // SEP
 
 // 두 문자열이 같은지 확인할 수 있습니다.
-assert.isTrue('j' + 's' === _____)
+check.isTrue('j' + 's' === _____)
 
 // SEP
 
 // ===는 두 값이 같은지 형변환 없이 엄격하게 비교합니다.
-assert.isFalse(5 === '5')
+check.isFalse(5 === '5')
 
-assert.isTrue(
+check.isTrue(
     5 === ___'5'___,
     '숫자 5와 정확히 같은 값이어야 합니다'
 )
@@ -19,9 +19,9 @@ assert.isTrue(
 // SEP
 
 // ==로 종류가 다른 두 값을 비교할 때 형변환이 일어나기도 합니다.
-assert.isTrue(false == 0)
+check.isTrue(false == 0)
 
-assert.isTrue(
+check.isTrue(
     5 == '_____',
     '숫자 5와 같다고 칠 수 있는 문자열이어야 합니다'
   )
@@ -31,9 +31,9 @@ assert.isTrue(
 // 두 객체가 똑같이 닮았다 해도 같은 객체일 수는 없습니다.
 const object = { x: 0 }
 
-assert.isFalse({ x: 0 } === object)
+check.isFalse({ x: 0 } === object)
 
-assert.isTrue(
+check.isTrue(
     ___{ x: 0 }___ === object,
     '객체는 그 자신과만 같을 수 있습니다'
 )
@@ -41,4 +41,4 @@ assert.isTrue(
 // SEP
 
 // 하지만 많은 경우, 두 객체가 똑같이 닮았다면 그걸로 충분합니다.
-assert.deepEqual(_____, { x: 0 })
+check.deepEqual(_____, { x: 0 })
