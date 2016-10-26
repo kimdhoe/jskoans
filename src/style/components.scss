@@ -11,6 +11,7 @@ $color-yellow: #b58900;
 $color-red: #dc322f;
 $color-blue: #268bd2;
 $color-cyan: #2aa198;
+$color-green: #859900;
 $base-text-color: $color-base00;
 $muted-text-color: $color-base1;
 
@@ -59,10 +60,40 @@ $muted-text-color: $color-base1;
   height: $size;
   line-height: $size;
   background-color: $bg;
+  border: none;
   border-radius: $size / 2;
   letter-spacing: 1px;
   text-decoration: none;
   color: $color-base00;
+
+  &:hover {
+    background-color: darken($bg, 5%);
+  }
+}
+
+.GoNext-button {
+  $size: 100px;
+  $bg: $color-base2;
+
+  display: block;
+  margin: 0 auto;
+  padding: 1em;
+  line-height: $size;
+  background-color: $bg;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  line-height: 1.4;
+  font-size: 0.8em;
+
+  span {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+    font-family: $code-font-family;
+    color: $muted-text-color;
+  }
 
   &:hover {
     background-color: darken($bg, 5%);
@@ -240,6 +271,12 @@ $muted-text-color: $color-base1;
   background-color: $color-blue;
   text-align: center;
   color: $color-base2;
+}
+
+.HelpBox-saying {
+  margin: 0;
+  font-style: italic;
+  color: $color-green;
 }
 
 .Code {

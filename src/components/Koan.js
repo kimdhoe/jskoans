@@ -1,9 +1,4 @@
 import React                   from 'react'
-import { connect }             from 'react-redux'
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import map                     from 'ramda/src/map'
-import join                    from 'ramda/src/join'
-import replace                 from 'ramda/src/replace'
 import isEmpty                 from 'ramda/src/isEmpty'
 
 import makeIframe    from '../util/makeIframe'
@@ -17,8 +12,11 @@ import Desc          from './Desc'
 import Code          from './Code'
 import CodeWithInput from './CodeWithInput'
 import HelpBox       from './HelpBox'
+import GoNext        from './GoNext'
+import aphorism      from '../util/aphorism'
 
 const AnimatedHelpBox = withFadeSlide(HelpBox)
+const AnimatedGoNext  = withFadeSlide(GoNext)
 
 class Koan extends React.Component {
   static propTypes    = { meditation: React.PropTypes.object.isRequired
@@ -28,16 +26,26 @@ class Koan extends React.Component {
 
   constructor () {
     super()
-    this.state = { answers:     {}
-                 , attempts:    0
-                 , justFailed:  false
-                 , hasFinished: false
-                 , error:       null
+    this.state = { answers:        {}
+                 , attempts:       0
+                 , justFailed:     false
+                 , hasFinished:    false
+                 , error:          null
+                 , gotRightAnswer: false
+                 , aphorism:       ''
                  }
+    this.handleCtrlReturn = this.handleCtrlReturn.bind(this)
+    this.handleInput      = this.handleInput.bind(this)
+    this.onSubmit         = this.onSubmit.bind(this)
+    this.goNext           = this.goNext.bind(this)
   }
 
-  handlePass () {
-    this.setState({ answers: {} })
+  goNext () {
+    if (this.state.gotRightAnswer) {
+      window.removeEventListener('keydown', this.handleCtrlReturn)
+    }
+
+    console.log('Go to the next one')
 
     const { next } = this.props
 
@@ -47,10 +55,44 @@ class Koan extends React.Component {
       this.context.router.push(`/${next.category}/${next.id}`)
   }
 
+  handleCtrlReturn (e) {
+    if (e.ctrlKey && e.keyCode === 13) {
+      e.preventDefault()
+      this.goNext()
+    }
+  }
+
+  handlePass () {
+    if (!this.state.gotRightAnswer) {
+      window.addEventListener('keydown', this.handleCtrlReturn)
+    }
+
+    this.setState({ error:          null
+                  , gotRightAnswer: true
+                  , aphorism:       aphorism()
+                  }
+                 )
+
+    // this.setState({ answers: {} })
+
+    // const { next } = this.props
+    //
+    // if (isEmpty(next))
+    //   this.setState({ hasFinished: true })
+    // else
+    //   this.context.router.push(`/${next.category}/${next.id}`)
+  }
+
   handleFail (result) {
-    this.setState({ justFailed: true
-                  , attempts:   this.state.attempts + 1
-                  , error:      result.err
+    if (this.state.gotRightAnswer) {
+      window.removeEventListener('keydown', this.handleCtrlReturn)
+    }
+
+    this.setState({ justFailed:     true
+                  , attempts:       this.state.attempts + 1
+                  , error:          result.err
+                  , gotRightAnswer: false
+                  , aphorism:       ''
                   }
                  )
     setTimeout( function () { this.setState({ justFailed: false }) }.bind(this)
@@ -69,7 +111,7 @@ class Koan extends React.Component {
   onSubmit (e)  {
     e.preventDefault()
 
-    this.setState({ error: null, hasFinished: false })
+    this.setState({ error: null, hasFinished: false, gotRightAnswer: false })
 
     const keys = Object.keys(this.state.answers)
 
@@ -88,10 +130,6 @@ class Koan extends React.Component {
     const codeString =
       fillIn(this.props.meditation.code, this.state.answers) + '\n'
       // transpile(fillIn(this.props.meditation.code, this.state.answers)) + '\n'
-
-    // runTest(ieval, codeString)
-    //   .on('pass', this.handlePass.bind(this))
-    //   .on('fail', this.handleFail.bind(this))
 
     const result = runTest(ieval, codeString)
 
@@ -117,7 +155,7 @@ class Koan extends React.Component {
             code={line.text}
             answer={this.state.answers[nextInputIndex++] || ''}
             justFailed={this.state.justFailed}
-            handleInput={this.handleInput.bind(this)}
+            handleInput={this.handleInput}
           />
         : <Code
             key={i}
@@ -130,7 +168,7 @@ class Koan extends React.Component {
         <Desc description={this.props.meditation.description} />
 
         <div className="Koan-body">
-          <form className="Koan-codes" onSubmit={this.onSubmit.bind(this)}>
+          <form className="Koan-codes" onSubmit={this.onSubmit}>
             <div>
               {codes}
             </div>
@@ -159,6 +197,17 @@ class Koan extends React.Component {
             />
           }
         </div>
+
+        {this.state.aphorism &&
+          <AnimatedGoNext onClick={this.goNext} />
+        }
+
+        {this.state.gotRightAnswer &&
+          <AnimatedHelpBox
+            aphorism={this.state.aphorism}
+            key={Date()}
+          />
+        }
       </div>
     )
   }
