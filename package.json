@@ -28,8 +28,9 @@
     "express": "^4.14.0",
     "gh-pages": "^0.11.0",
     "josa": "^2.0.1",
-    "node-sass": "^3.9.3",
+    "node-sass": "^4.1.1",
     "normalize.css": "^4.2.0",
+    "object-inspect": "^1.2.1",
     "prismjs": "^1.5.1",
     "ramda": "^0.22.1",
     "react": "^15.3.1",
@@ -46,6 +47,7 @@
     "util-inspect": "^0.1.8",
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.6.1",
-    "webpack-hot-middleware": "^2.12.2"
+    "webpack-hot-middleware": "^2.12.2",
+    "worker-loader": "^0.7.1"
   }
 }

@@ -6,7 +6,9 @@ const GoNext = ({ onClick }) =>
       className="GoNext-button"
       onClick={onClick}
     >
-      다음<br /><span>Ctrl + Return</span>
+      다음
+      <br />
+      <span>Ctrl + Return</span>
     </button>
   </div>
 

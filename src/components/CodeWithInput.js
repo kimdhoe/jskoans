@@ -19,7 +19,8 @@ class CodeWithInput extends React.Component {
     const { code, handleInput } = this.props
 
     // Render the default answer in input field, if present.
-    const defaultAnswer = code.match(FILL_ME_IN_REGEX)[0]
+    const defaultAnswer = code
+                            .match(FILL_ME_IN_REGEX)[0]
                             .replace(/_/g, '')
 
     if (defaultAnswer)
@@ -27,7 +28,8 @@ class CodeWithInput extends React.Component {
   }
 
   componentDidMount () {
-    this.props.index === 0 && this._input.focus()
+    if (this.props.index === 0)
+      this._input.focus()
   }
 
   render () {
@@ -49,6 +51,7 @@ class CodeWithInput extends React.Component {
           ref={x => { this._input = x }}
           value={this.props.answer}
           onChange={this.onChange.bind(this)}
+          autoComplete="off"
         />
 
         <Code text={postInput} isInline={true} />

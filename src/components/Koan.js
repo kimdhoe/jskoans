@@ -1,21 +1,19 @@
-import React                   from 'react'
-import isEmpty                 from 'ramda/src/isEmpty'
+import React   from 'react'
+import isEmpty from 'ramda/src/isEmpty'
 
-import makeIframe    from '../util/makeIframe'
-import runTest       from '../util/runTest2'
-import { check }     from '../util/check'
-import fillIn        from '../util/fillIn'
 // import transpile     from '../util/transpile'
-import encourage     from '../util/encourage'
 import withFadeSlide from '../util/withFadeSlide'
-import Desc          from './Desc'
-import Code          from './Code'
-import CodeWithInput from './CodeWithInput'
-import HelpBox       from './HelpBox'
-import GoNext        from './GoNext'
+import fillIn        from '../util/fillIn'
+import encourage     from '../util/encourage'
 import aphorism      from '../util/aphorism'
+import KoanDesc      from './KoanDesc'
+import KoanBody      from './KoanBody'
+import KoanHelp      from './KoanHelp'
+import GoNext        from './GoNext'
 
-const AnimatedHelpBox = withFadeSlide(HelpBox)
+import EvalWorker from 'worker!../worker.js'
+
+const AnimatedHelp = withFadeSlide(KoanHelp)
 const AnimatedGoNext  = withFadeSlide(GoNext)
 
 class Koan extends React.Component {
@@ -26,26 +24,43 @@ class Koan extends React.Component {
 
   constructor () {
     super()
+
     this.state = { answers:        {}
                  , attempts:       0
-                 , justFailed:     false
-                 , hasFinished:    false
-                 , error:          null
+                 , animationKey:   true   // Toggles on submit
+                 , justFailed:     false  // For animation on test fail
+                 , hasFinished:    false  // Has a user passed the last koan?
+                 , error:          null   // Test result
                  , gotRightAnswer: false
-                 , aphorism:       ''
+                 , aphorism:       ''     // Show random saying on test pass
                  }
+
+    // Set up a worker for test evaluations.
+    this.resolve = null
+    this.worker  = new EvalWorker()
+    this.worker.addEventListener('message', e => {
+      this.resolve(e.data)
+      this.resolve = null
+    })
+
     this.handleCtrlReturn = this.handleCtrlReturn.bind(this)
     this.handleInput      = this.handleInput.bind(this)
     this.onSubmit         = this.onSubmit.bind(this)
     this.goNext           = this.goNext.bind(this)
+    this.runTest          = this.runTest.bind(this)
+    this.hasBlankAnswer   = this.hasBlankAnswer.bind(this)
   }
 
+  componentWillUnmount () {
+    this.worker.terminate()
+  }
+
+  // -> void
+  // Transitions to the next meditation if there is one.
   goNext () {
     if (this.state.gotRightAnswer) {
       window.removeEventListener('keydown', this.handleCtrlReturn)
     }
-
-    console.log('Go to the next one')
 
     const { next } = this.props
 
@@ -68,19 +83,12 @@ class Koan extends React.Component {
     }
 
     this.setState({ error:          null
+                  , attempts:       0
                   , gotRightAnswer: true
                   , aphorism:       aphorism()
+                  , hasFinished:    isEmpty(this.props.next)
                   }
                  )
-
-    // this.setState({ answers: {} })
-
-    // const { next } = this.props
-    //
-    // if (isEmpty(next))
-    //   this.setState({ hasFinished: true })
-    // else
-    //   this.context.router.push(`/${next.category}/${next.id}`)
   }
 
   handleFail (result) {
@@ -104,110 +112,94 @@ class Koan extends React.Component {
     this.setState({ answers: { ...this.state.answers
                              , [index]: answer
                              }
+                  , name: Date()
                   }
                  )
   }
 
-  onSubmit (e)  {
-    e.preventDefault()
-
-    this.setState({ error: null, hasFinished: false, gotRightAnswer: false })
-
+  // -> object
+  // Is there any unanswered field? If there is, produces an blank-error object.
+  hasBlankAnswer () {
     const keys = Object.keys(this.state.answers)
 
     if (  keys.length === 0
        || keys.some(k => this.state.answers[k].trim() === '')
        )
-      return this.handleFail({ err: { name:    'BlankError'
-                                    , message: '빈 칸을 채워주세요.'
-                                    }
-                             }
-                            )
+      return ({ err: { name:    'BlankError'
+                     , message: '빈 칸을 채워주세요.'
+                     }
+              }
+             )
+  }
 
-    const iframe = makeIframe(document, { check })
-    const ieval  = iframe.contentWindow.eval
+  // string -> Promise<object>
+  // Given test codes, produces a promise of a test result.
+  // Effect: Sets this.resolve to resolve function of the promise executor.
+  runTest (code) {
+    return new Promise((resolve, reject) => {
+      this.resolve = resolve
+
+      this.worker.postMessage(code)
+    })
+  }
+
+  onSubmit (e)  {
+    e.preventDefault()
+
+    this.setState({ error:          null
+                  , hasFinished:    false
+                  , gotRightAnswer: false
+                  , animationKey:   !this.state.animationKey
+                  }
+                 )
+
+    const blankError = this.hasBlankAnswer()
+
+    if (blankError)
+      return this.handleFail(blankError)
 
     const codeString =
       fillIn(this.props.meditation.code, this.state.answers) + '\n'
       // transpile(fillIn(this.props.meditation.code, this.state.answers)) + '\n'
 
-    const result = runTest(ieval, codeString)
-
-    if (result.failed)
-      this.handleFail(result)
-    else
-      this.handlePass()
-
-    document.body.removeChild(iframe)
+    this.runTest(codeString)
+      .then(result => {
+        if (result.failed) this.handleFail(result)
+        else               this.handlePass()
+      })
+      .catch(err => console.error(err))
   }
 
   render() {
     const { description, code } = this.props.meditation
 
-    // state - Index number of the next input field.
-    let nextInputIndex = 0
-
-    const codes = code.map((line, i) =>
-      line.hasInputField
-        ? <CodeWithInput
-            key={i}
-            index={nextInputIndex}
-            code={line.text}
-            answer={this.state.answers[nextInputIndex++] || ''}
-            justFailed={this.state.justFailed}
-            handleInput={this.handleInput}
-          />
-        : <Code
-            key={i}
-            text={line.text}
-          />
-    )
-
     return (
       <div className="Koan">
-        <Desc description={this.props.meditation.description} />
+        <KoanDesc description={description} />
 
-        <div className="Koan-body">
-          <form className="Koan-codes" onSubmit={this.onSubmit}>
-            <div>
-              {codes}
-            </div>
+        <KoanBody
+          code={code}
+          answers={this.state.answers}
+          justFailed={this.state.justFailed}
+          handleInput={this.handleInput}
+          onSubmit={this.onSubmit}
+        />
 
-            <input
-              className="Koan-button visuallyHidden"
-              type="submit"
-              value="go"
-            />
-          </form>
-        </div>
+        {!this.state.hasFinished && this.state.aphorism &&
+          <div className="Koan-next">
+            <AnimatedGoNext onClick={this.goNext} />
+          </div>
+        }
 
         <div className="Koan-help">
-          {this.state.error &&
-            <AnimatedHelpBox
-              failMessage="아직 깨달음에 이르지 못했습니다."
-              encourage={encourage(this.state.attempts)}
-              key={this.state.attempts}
-              error={this.state.error}
-            />
-          }
-
-          {this.state.hasFinished &&
-            <AnimatedHelpBox
-              notice="끝. 앞으로 더 많은 내용이 추가될 예정입니다."
-            />
-          }
-        </div>
-
-        {this.state.aphorism &&
-          <AnimatedGoNext onClick={this.goNext} />
-        }
-
-        {this.state.gotRightAnswer &&
-          <AnimatedHelpBox
+          <AnimatedHelp
+            hasFinished={this.state.hasFinished}
             aphorism={this.state.aphorism}
-            key={Date()}
+            encourage={encourage(this.state.attempts)}
+            error={this.state.error}
+            key={String(this.state.animationKey) + String(this.state.attempts)}
           />
-        }
+        </div>
       </div>
     )
   }

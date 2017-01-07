@@ -1,6 +1,6 @@
 import de      from 'deep-equal'
 import assert  from 'chai'
-import inspect from 'util-inspect'
+import inspect from 'object-inspect'
 import josa    from 'josa'
 
 class AssertionError extends Error {

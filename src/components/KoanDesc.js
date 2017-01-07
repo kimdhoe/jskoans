@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Desc = ({ description }) =>
+const KoanDesc = ({ description }) =>
   <div className="Koan-description">
     {description.map((x, i) =>
       <p key={i}>
@@ -9,6 +9,6 @@ const Desc = ({ description }) =>
     )}
   </div>
 
-Desc.propTypes = { description: React.PropTypes.array.isRequired }
+KoanDesc.propTypes = { description: React.PropTypes.array.isRequired }
 
-export default Desc
+export default KoanDesc
